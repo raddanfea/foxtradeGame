@@ -69,7 +69,6 @@ def map_editor(data):
 
         map_layer0, map_layer1, map_layer2, map_layer3 = current_map.get_near(m_w, m_h, player_tile_x, player_tile_y)
 
-        print(len(map_layer0) + len(map_layer1) + len(map_layer2) + len(map_layer3))
 
         # under player layers
         for layer in [map_layer0, map_layer1]:
@@ -99,11 +98,9 @@ def map_editor(data):
 
         # GUI recalculation, dont do it every tick!--------#
         if tick < 1:
-
             button_data = [
 
             ]
-
             # create buttons
             data.button_list = []
             for each in button_data:
