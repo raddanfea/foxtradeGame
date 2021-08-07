@@ -1,16 +1,9 @@
-import json
-import pickle
-import time
-import zlib
 from math import floor, ceil
 
 import pygame.time
 
 from common_functions import *
 
-
-def current_milli_time():
-    return round(time.time() * 1000)
 
 
 def map_editor(data):
@@ -37,21 +30,13 @@ def map_editor(data):
     placement_height, selected_tile_x, selected_tile_y = 1, 5, 5
     m_w, m_h = int(ceil(1 + data.screen.get_width() / scale / 2)), int(ceil(1 + data.screen.get_height() / scale / 2))
 
-    map = "max_test.map"
+    map = "max_test.mapfile"
     current_map = GameMap(map)
     preview_bg = pygame.transform.scale(tile_set[0][15], (max(20, scale), max(20, scale))).convert()
 
     # load map
-    try:
-        load_map(current_map)
-    except FileNotFoundError:
-        for x in range(1000):
-            print(x)
-            for y in range(1000):
-                current_map.set_tile(0, x, y, 0, 0, 15)
-                current_map.set_tile(1, x, y, 0, 0, 15)
-                current_map.set_tile(2, x, y, 0, 0, 15)
-                current_map.set_tile(3, x, y, 0, 0, 15)
+
+    load_map(current_map, data)
 
     while running:
         mx, my = pygame.mouse.get_pos()
@@ -129,7 +114,7 @@ def map_editor(data):
         if keys[pygame.K_d]:  player_entity.right()
         if keys[pygame.K_p]:  paint = not paint
         if keys[pygame.K_ESCAPE]:
-            save_map(current_map)
+            save_map(current_map, data)
             running = False
 
         key_events = pygame.event.get()

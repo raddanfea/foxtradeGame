@@ -1,5 +1,6 @@
 import dataclasses
 import pickle
+import time
 import zlib
 
 import pygame
@@ -92,7 +93,7 @@ class GameMap:
                     except:
                         pass
 
-        print(len(near_tiles0) * 4)
+        # print(len(near_tiles0) * 4)
         return near_tiles0, near_tiles1, near_tiles2, near_tiles3
 
 
@@ -211,14 +212,27 @@ def blit_tile(data, scaled_tile_set, each, player_entity, scale, half_screen_wid
                       (each.y * scale) - player_entity.y + half_screen_height))
 
 
-def save_map(current_map):
+def save_map(current_map, data):
     with open(current_map.name, 'wb') as f:
         compressed = zlib.compress(pickle.dumps(current_map.save_map()))
         f.write(compressed)
 
 
-def load_map(current_map):
-    with open(current_map.name, 'rb') as fp:
-        obj = fp.read()
-        obj = pickle.loads(zlib.decompress(obj))
-        current_map.load_map(obj)
+def load_map(current_map, data):
+    try:
+        with open(current_map.name, 'rb') as fp:
+            obj = fp.read()
+            obj = pickle.loads(zlib.decompress(obj))
+            current_map.load_map(obj)
+    except FileNotFoundError:
+        for x in range(1000):
+            print(x)
+            for y in range(1000):
+                current_map.set_tile(0, x, y, 0, 0, 15)
+                current_map.set_tile(1, x, y, 0, 0, 15)
+                current_map.set_tile(2, x, y, 0, 0, 15)
+                current_map.set_tile(3, x, y, 0, 0, 15)
+
+
+def current_milli_time():
+    return round(time.time() * 1000)
