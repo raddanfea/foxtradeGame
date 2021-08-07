@@ -1,3 +1,7 @@
+import dataclasses
+import pickle
+import zlib
+
 import pygame
 from pygame import MOUSEBUTTONDOWN, K_LEFT, K_RIGHT, K_UP, K_DOWN, KEYDOWN
 import sys
@@ -33,6 +37,8 @@ def load_tileset(filename, width, height):
 
 
 class MapTile:
+    __slots__ = 'x', 'y', 'height', 'tm', 'tile_x', 'tile_y'
+
     def __init__(self, height, x, y, tm, tile_x, tile_y):
         self.height = height
         self.x = x
@@ -45,15 +51,19 @@ class MapTile:
 class GameMap:
     def __init__(self, name):
         self.name = name
-        self.data = {'0': {'0': {'0': [0, 0]}}}
+        self.data = {0: {0: {0: [0, 0]}}}
 
     def set_tile(self, h, x, y, tm, tx, ty):
         self.data.setdefault(str(h), {})
         self.data[str(h)].setdefault(str(x), {})
         self.data[str(h)][str(x)].setdefault(str(y), [tm, tx, ty])
+        self.data[str(h)][str(x)][str(y)] = [tm, tx, ty]
 
     def remove_tile(self, h, x, y):
-        self.data[str(h)][str(x)].pop(str(y))
+        try:
+            self.data[str(int(h))][str(int(x))].pop(str(int(y)))
+        except KeyError:
+            pass
 
     def save_map(self):
         return self.data
@@ -82,6 +92,7 @@ class GameMap:
                     except:
                         pass
 
+        print(len(near_tiles0) * 4)
         return near_tiles0, near_tiles1, near_tiles2, near_tiles3
 
 
@@ -198,3 +209,16 @@ def blit_tile(data, scaled_tile_set, each, player_entity, scale, half_screen_wid
     data.screen.blit(scaled_tile_set[each.tile_x][each.tile_y],
                      ((each.x * scale) - player_entity.x + half_screen_width,
                       (each.y * scale) - player_entity.y + half_screen_height))
+
+
+def save_map(current_map):
+    with open(current_map.name, 'wb') as f:
+        compressed = zlib.compress(pickle.dumps(current_map.save_map()))
+        f.write(compressed)
+
+
+def load_map(current_map):
+    with open(current_map.name, 'rb') as fp:
+        obj = fp.read()
+        obj = pickle.loads(zlib.decompress(obj))
+        current_map.load_map(obj)

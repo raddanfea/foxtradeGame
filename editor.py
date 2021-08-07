@@ -1,5 +1,7 @@
 import json
+import pickle
 import time
+import zlib
 from math import floor, ceil
 
 import pygame.time
@@ -41,12 +43,11 @@ def map_editor(data):
 
     # load map
     try:
-        with open(current_map.name) as fp:
-            current_map.load_map(json.load(fp))
+        load_map(current_map)
     except FileNotFoundError:
-        for x in range(10):
+        for x in range(1000):
             print(x)
-            for y in range(10):
+            for y in range(1000):
                 current_map.set_tile(0, x, y, 0, 0, 15)
                 current_map.set_tile(1, x, y, 0, 0, 15)
                 current_map.set_tile(2, x, y, 0, 0, 15)
@@ -69,7 +70,6 @@ def map_editor(data):
 
         map_layer0, map_layer1, map_layer2, map_layer3 = current_map.get_near(m_w, m_h, player_tile_x, player_tile_y)
 
-
         # under player layers
         for layer in [map_layer0, map_layer1]:
             for each in layer:
@@ -88,8 +88,8 @@ def map_editor(data):
         data.screen.blit(preview_bg, (50, 50))
         data.screen.blit(preview, (50, 50))
 
-        mc_x, mc_y = (mx + player_entity.x - half_screen_width) // scale, \
-                     (my + player_entity.y - half_screen_height) // scale
+        mc_x, mc_y = int((mx + player_entity.x - half_screen_width) // scale), \
+                     int((my + player_entity.y - half_screen_height) // scale)
 
         draw_text(f'X: {str(mc_x)}  Y:{str(mc_y)}', data.default_font, (255, 255, 255), data.screen, 50, 50, 20, 20)
         draw_text(f'Height:{str(placement_height)}', data.default_font, (255, 255, 255), data.screen, 50, 70, 20, 20)
@@ -129,26 +129,25 @@ def map_editor(data):
         if keys[pygame.K_d]:  player_entity.right()
         if keys[pygame.K_p]:  paint = not paint
         if keys[pygame.K_ESCAPE]:
-            with open(current_map.name, 'w') as f:
-                json.dump(current_map.save_map(), f)
+            save_map(current_map)
             running = False
 
         key_events = pygame.event.get()
 
         if paint:
             mouse_p = pygame.mouse.get_pressed()
-            if mouse_p[0]:  current_map.add_tile(placement_height, mc_x, mc_y, 0, selected_tile_x,
+            if mouse_p[0]:  current_map.set_tile(placement_height, mc_x, mc_y, 0, selected_tile_x,
                                                  selected_tile_y)
-            if mouse_p[1]:  current_map.add_tile(placement_height, mc_x, mc_y, 0, 0, 15)
+            if mouse_p[1]:  current_map.set_tile(placement_height, mc_x, mc_y, 0, 0, 15)
             if mouse_p[2]:
                 current_map.remove_tile(placement_height, mc_x, mc_y)
         else:
             for event in key_events:
                 if event.type == MOUSEBUTTONDOWN:
                     if event.button == 1:
-                        current_map.add_tile(placement_height, mc_x, mc_y, 0, selected_tile_x, selected_tile_y)
+                        current_map.set_tile(placement_height, mc_x, mc_y, 0, selected_tile_x, selected_tile_y)
                     if event.button == 2:
-                        current_map.add_tile(placement_height, mc_x, mc_y, 0, 0, 15)
+                        current_map.set_tile(placement_height, mc_x, mc_y, 0, 0, 15)
                     if event.button == 3:
                         current_map.remove_tile(placement_height, mc_x, mc_y)
 
