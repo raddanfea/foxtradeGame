@@ -1,6 +1,5 @@
 import sys
 
-import pygame.font
 from pygame import QUIT, MOUSEBUTTONDOWN
 
 from common_functions import *
@@ -38,8 +37,6 @@ def prepStuff():
             data.load_save_data(*json.load(f).values())
     except Exception:
         pass
-    # load font
-    data.default_font = pygame.font.Font('resources/font/silver.ttf', 25)
 
 
 def main_menu():
@@ -59,7 +56,7 @@ def main_menu():
                        ('Editor', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
                        50 + 2 * data.width / 8, data.height - heighttenth, data.width / 10, heighttenth / 2, editor),
                        ('Exit', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
-                        data.width - data.width / 8 - 100, data.height - heighttenth, data.width / 8, heighttenth / 2, exit_game),
+                        data.width - data.width / 8 - 100, data.height - heighttenth, data.width / 10, heighttenth / 2, exit_game),
                        ]
 
         # create butons

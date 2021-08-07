@@ -1,7 +1,7 @@
-import dataclasses
 import pickle
 import time
 import zlib
+from multiprocessing import Process
 
 import pygame
 from pygame import MOUSEBUTTONDOWN, K_LEFT, K_RIGHT, K_UP, K_DOWN, KEYDOWN
@@ -38,21 +38,30 @@ def load_tileset(filename, width, height):
 
 
 class MapTile:
-    __slots__ = 'x', 'y', 'height', 'tm', 'tile_x', 'tile_y'
-
-    def __init__(self, height, x, y, tm, tile_x, tile_y):
+    def __init__(self, height, x, y, tm, tile_x, tile_y, scale):
         self.height = height
         self.x = x
         self.y = y
         self.tm = tm
         self.tile_x = tile_x
         self.tile_y = tile_y
+        self.scale = scale
+        self.rep_rect = pygame.Rect(x, y, scale, scale)
 
+    def blit_tile(self, screen, scaled_tile_set, player_entity, scale, half_screen_width, half_screen_height):
+        self.update_tile(scale, player_entity, half_screen_width, half_screen_height)
+        screen.blit(scaled_tile_set[self.tile_x][self.tile_y],
+                         ((self.x * scale) - player_entity.x + half_screen_width,
+                          (self.y * scale) - player_entity.y + half_screen_height))
+
+    def update_tile(self, scale, player_entity, half_screen_width, half_screen_height):
+        self.rep_rect = pygame.Rect(((self.x * scale) - player_entity.x + half_screen_width),
+                                    ((self.y * scale) - player_entity.y + half_screen_height), scale, scale)
 
 class GameMap:
     def __init__(self, name):
         self.name = name
-        self.data = {0: {0: {0: [0, 0]}}}
+        self.data = {0: {0: {0: [0, 0, 0]}}}
 
     def set_tile(self, h, x, y, tm, tx, ty):
         self.data.setdefault(str(h), {})
@@ -67,12 +76,20 @@ class GameMap:
             pass
 
     def save_map(self):
-        return self.data
+        with open(self.name, 'wb') as f:
+            compressed = zlib.compress(pickle.dumps(self.data))
+            f.write(compressed)
 
-    def load_map(self, map_data):
-        self.data = map_data
+    def load_map(self):
+        try:
+            with open(self.name, 'rb') as fp:
+                obj = fp.read()
+                obj = pickle.loads(zlib.decompress(obj))
+                self.data = obj
+        except FileNotFoundError:
+            pass
 
-    def get_near(self, x_dist, y_dist, p_x, p_y):
+    def get_near(self, x_dist, y_dist, p_x, p_y, scale):
         near_tiles0 = []
         near_tiles1 = []
         near_tiles2 = []
@@ -83,13 +100,13 @@ class GameMap:
                     try:
                         tm, tx, ty = self.data[str(height_each)][str(x_each)][str(y_each)]
                         if height_each == 0:
-                            near_tiles0.append(MapTile(height_each, x_each, y_each, tm, tx, ty))
+                            near_tiles0.append(MapTile(height_each, x_each, y_each, tm, tx, ty, scale))
                         elif height_each == 1:
-                            near_tiles1.append(MapTile(height_each, x_each, y_each, tm, tx, ty))
+                            near_tiles1.append(MapTile(height_each, x_each, y_each, tm, tx, ty, scale))
                         elif height_each == 2:
-                            near_tiles2.append(MapTile(height_each, x_each, y_each, tm, tx, ty))
+                            near_tiles2.append(MapTile(height_each, x_each, y_each, tm, tx, ty, scale))
                         else:
-                            near_tiles3.append(MapTile(height_each, x_each, y_each, tm, tx, ty))
+                            near_tiles3.append(MapTile(height_each, x_each, y_each, tm, tx, ty, scale))
                     except:
                         pass
 
@@ -98,27 +115,24 @@ class GameMap:
 
 
 class PlayerData:
-    def __init__(self, screen, color):
-        self.x = screen.get_width() / 2
-        self.y = screen.get_height() / 2
+    def __init__(self, screen, color, scale):
+        self.x = screen.get_width() // 2
+        self.y = screen.get_height() // 2
         self.screen = screen
         self.color = color
-        self.representation = pygame.Rect(0, 0, 50, 50)
+        self.scale = scale
+        self.representation = pygame.Rect(screen.get_width() // 2, screen.get_height(), scale, scale)
         self.vertical_speed = 0
         self.vertical_walk = 0
         self.horizontal_speed = 0
         self.horizontal_walk = 0
 
     def draw_player(self):
-        self.physics()
-        self.representation.center = self.screen.get_width() / 2, self.screen.get_height() / 2
+        self.representation = pygame.Rect(self.screen.get_width() // 2, self.screen.get_height() // 2,
+                                          self.scale * 0.9, self.scale * 0.9)
         pygame.draw.rect(self.screen, self.color, self.representation)
 
-    def draw_entity(self):
-        self.representation.center = self.x, self.y
-        pygame.draw.rect(self.screen, self.color, self.representation)
-
-    def physics(self):
+    def physics(self, layers, scale, player_entity, half_screen_width, half_screen_height):
         if self.vertical_walk != 0:
             self.vertical_walk = self.vertical_walk * 0.8
             self.vertical_speed += self.vertical_walk * 0.05
@@ -129,24 +143,32 @@ class PlayerData:
 
         self.y += self.vertical_speed
         self.x += self.horizontal_speed
+
+        for each in layers:
+            each.update_tile(scale, player_entity, half_screen_width, half_screen_height)
+            if each.tile_x == 3 and each.tile_y == 0 and each.rep_rect.colliderect(self.representation):
+                self.y -= self.vertical_speed
+                self.x -= self.horizontal_speed
+                break
+
         self.vertical_speed = self.vertical_speed * 0.8
         self.horizontal_speed = self.horizontal_speed * 0.8
 
     def up(self):
         if abs(self.vertical_speed < 60):
-            self.vertical_walk -= 4
+            self.vertical_walk -= 2
 
     def down(self):
         if abs(self.vertical_speed < 60):
-            self.vertical_walk += 4
+            self.vertical_walk += 2
 
     def left(self):
         if abs(self.vertical_speed < 60):
-            self.horizontal_walk -= 4
+            self.horizontal_walk -= 2
 
     def right(self):
         if abs(self.vertical_speed < 60):
-            self.horizontal_walk += 4
+            self.horizontal_walk += 2
 
 
 class GameData:
@@ -158,7 +180,7 @@ class GameData:
         self.width = 1920
         self.height = 1080
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
-        self.default_font = pygame.font.SysFont(None, 20)
+        self.default_font = pygame.font.Font('resources/font/silver.ttf', 25)
         self.REDCOLOR = (255, 0, 0)
         self.GREENCOLOR = (0, 255, 0)
         self.BLUECOLOR = (0, 0, 255)
@@ -205,33 +227,6 @@ class GameButton:
     def goto_dest(self):
         self.destination()
 
-
-def blit_tile(data, scaled_tile_set, each, player_entity, scale, half_screen_width, half_screen_height):
-    data.screen.blit(scaled_tile_set[each.tile_x][each.tile_y],
-                     ((each.x * scale) - player_entity.x + half_screen_width,
-                      (each.y * scale) - player_entity.y + half_screen_height))
-
-
-def save_map(current_map, data):
-    with open(current_map.name, 'wb') as f:
-        compressed = zlib.compress(pickle.dumps(current_map.save_map()))
-        f.write(compressed)
-
-
-def load_map(current_map, data):
-    try:
-        with open(current_map.name, 'rb') as fp:
-            obj = fp.read()
-            obj = pickle.loads(zlib.decompress(obj))
-            current_map.load_map(obj)
-    except FileNotFoundError:
-        for x in range(1000):
-            print(x)
-            for y in range(1000):
-                current_map.set_tile(0, x, y, 0, 0, 15)
-                current_map.set_tile(1, x, y, 0, 0, 15)
-                current_map.set_tile(2, x, y, 0, 0, 15)
-                current_map.set_tile(3, x, y, 0, 0, 15)
 
 
 def current_milli_time():

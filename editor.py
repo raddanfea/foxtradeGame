@@ -5,20 +5,18 @@ import pygame.time
 from common_functions import *
 
 
-
 def map_editor(data):
+    SAVDIR = "maps/"
     running = True
     data.click = False
     pygame.event.clear()
-    tick = 0
-    player_entity = PlayerData(data.screen, (255, 255, 255))
     paint = False
 
     tile_set, tile_set_w, tile_set_h = load_tileset('resources/tileset/16x16DungeonTileset.v4.png', 16, 16)
 
     # scaling of tile_set
     scale = 100
-    scaled_tile_set = tile_set.copy()
+    scaled_tile_set = tile_set
     for x in range(tile_set_w):
         for y in range(tile_set_h):
             scaled_tile_set[x][y] = pygame.transform.scale(tile_set[x][y], (scale, scale)).convert_alpha()
@@ -26,17 +24,21 @@ def map_editor(data):
     half_screen_width = data.screen.get_width() // 2
     half_screen_height = data.screen.get_height() // 2
 
+    # player
+    player_entity = PlayerData(data.screen, (255, 255, 255), scale)
+
     # for map editing
     placement_height, selected_tile_x, selected_tile_y = 1, 5, 5
     m_w, m_h = int(ceil(1 + data.screen.get_width() / scale / 2)), int(ceil(1 + data.screen.get_height() / scale / 2))
 
-    map = "max_test.mapfile"
+    map = SAVDIR + "m1.mapfile"
+
     current_map = GameMap(map)
     preview_bg = pygame.transform.scale(tile_set[0][15], (max(20, scale), max(20, scale))).convert()
 
     # load map
 
-    load_map(current_map, data)
+    current_map.load_map()
 
     while running:
         mx, my = pygame.mouse.get_pos()
@@ -47,28 +49,27 @@ def map_editor(data):
 
         draw_text('game', data.default_font, (255, 255, 255), data.screen, 20, 20, 20, 20)
 
-        tick -= 1
-
         # map loop
-
         player_tile_x, player_tile_y = int(player_entity.x // scale), int(player_entity.y // scale)
 
-        map_layer0, map_layer1, map_layer2, map_layer3 = current_map.get_near(m_w, m_h, player_tile_x, player_tile_y)
+        map_layer_0, map_layer_1, map_layer_2, map_layer_3, = current_map.get_near(m_w, m_h, player_tile_x,
+                                                                                   player_tile_y, scale)
 
-        # under player layers
-        for layer in [map_layer0, map_layer1]:
-            for each in layer:
-                blit_tile(data, scaled_tile_set, each, player_entity, scale, half_screen_width, half_screen_height)
+        # map layering
+        player_entity.physics([*map_layer_0, *map_layer_1, *map_layer_2, *map_layer_3],
+                              scale, player_entity, half_screen_width, half_screen_height)
 
-        # player
+        for each in [*map_layer_0, *map_layer_1]:
+            each.blit_tile(data.screen, scaled_tile_set, player_entity, scale, half_screen_width,
+                           half_screen_height)
+
         player_entity.draw_player()
 
-        # over player layers
-        for layer in [map_layer2, map_layer3]:
-            for each in layer:
-                blit_tile(data, scaled_tile_set, each, player_entity, scale, half_screen_width, half_screen_height)
+        for each in [*map_layer_2, *map_layer_3]:
+            each.blit_tile(data.screen, scaled_tile_set, player_entity, scale, half_screen_width,
+                           half_screen_height)
 
-        # edit tool and GUI draw
+        # edit tool and GUI
         preview = pygame.transform.scale(tile_set[selected_tile_x][selected_tile_y], (scale, scale))
         data.screen.blit(preview_bg, (50, 50))
         data.screen.blit(preview, (50, 50))
@@ -81,21 +82,17 @@ def map_editor(data):
         draw_text(f'FPS:{str(floor(data.mainClock.get_fps()))}', data.default_font, (255, 255, 255), data.screen,
                   50, 90, 20, 20)
 
-        # GUI recalculation, dont do it every tick!--------#
-        if tick < 1:
-            button_data = [
+        # GUI recalculation
 
-            ]
-            # create buttons
-            data.button_list = []
-            for each in button_data:
-                buffer = list(each)
-                x = GameButton(*buffer)
-                data.button_list.append(x)
+        button_data = [
 
-            tick = data.fps // 3
-
-        # ------------------------------------------------#
+        ]
+        # create buttons
+        data.button_list = []
+        for each in button_data:
+            buffer = list(each)
+            x = GameButton(*buffer)
+            data.button_list.append(x)
 
         # draw buttons and check for collisons
 
@@ -114,7 +111,7 @@ def map_editor(data):
         if keys[pygame.K_d]:  player_entity.right()
         if keys[pygame.K_p]:  paint = not paint
         if keys[pygame.K_ESCAPE]:
-            save_map(current_map, data)
+            current_map.save_map()
             running = False
 
         key_events = pygame.event.get()

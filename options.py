@@ -1,6 +1,5 @@
 import json
 
-
 from common_functions import *
 
 g_data = GameData()
