@@ -1,9 +1,9 @@
 import pickle
 import time
 import zlib
-from multiprocessing import Process
 
 import pygame
+from Tools.scripts.objgraph import ignore
 from pygame import MOUSEBUTTONDOWN, K_LEFT, K_RIGHT, K_UP, K_DOWN, KEYDOWN
 import sys
 from pygame import K_ESCAPE, QUIT
@@ -49,14 +49,14 @@ class MapTile:
         self.rep_rect = pygame.Rect(x, y, scale, scale)
 
     def blit_tile(self, screen, scaled_tile_set, player_entity, scale, half_screen_width, half_screen_height):
-        self.update_tile(scale, player_entity, half_screen_width, half_screen_height)
         screen.blit(scaled_tile_set[self.tile_x][self.tile_y],
-                         ((self.x * scale) - player_entity.x + half_screen_width,
-                          (self.y * scale) - player_entity.y + half_screen_height))
+                    (int((self.x * scale) - player_entity.x + half_screen_width),
+                     int((self.y * scale) - player_entity.y + half_screen_height)))
 
     def update_tile(self, scale, player_entity, half_screen_width, half_screen_height):
         self.rep_rect = pygame.Rect(((self.x * scale) - player_entity.x + half_screen_width),
                                     ((self.y * scale) - player_entity.y + half_screen_height), scale, scale)
+
 
 class GameMap:
     def __init__(self, name):
@@ -68,6 +68,12 @@ class GameMap:
         self.data[str(h)].setdefault(str(x), {})
         self.data[str(h)][str(x)].setdefault(str(y), [tm, tx, ty])
         self.data[str(h)][str(x)][str(y)] = [tm, tx, ty]
+
+    def get_tile(self, h, x, y):
+        try:
+            return self.data[str(h)][str(x)][str(y)]
+        except Exception:
+            return 0, 0, 0
 
     def remove_tile(self, h, x, y):
         try:
@@ -110,7 +116,6 @@ class GameMap:
                     except:
                         pass
 
-        # print(len(near_tiles0) * 4)
         return near_tiles0, near_tiles1, near_tiles2, near_tiles3
 
 
@@ -123,9 +128,7 @@ class PlayerData:
         self.scale = scale
         self.representation = pygame.Rect(screen.get_width() // 2, screen.get_height(), scale, scale)
         self.vertical_speed = 0
-        self.vertical_walk = 0
         self.horizontal_speed = 0
-        self.horizontal_walk = 0
 
     def draw_player(self):
         self.representation = pygame.Rect(self.screen.get_width() // 2, self.screen.get_height() // 2,
@@ -133,42 +136,41 @@ class PlayerData:
         pygame.draw.rect(self.screen, self.color, self.representation)
 
     def physics(self, layers, scale, player_entity, half_screen_width, half_screen_height):
-        if self.vertical_walk != 0:
-            self.vertical_walk = self.vertical_walk * 0.8
-            self.vertical_speed += self.vertical_walk * 0.05
+        v_speed = self.vertical_speed // 10
+        h_speed = self.horizontal_speed // 10
 
-        if self.horizontal_walk != 0:
-            self.horizontal_walk = self.horizontal_walk * 0.85
-            self.horizontal_speed += self.horizontal_walk * 0.05
-
-        self.y += self.vertical_speed
-        self.x += self.horizontal_speed
+        self.y += v_speed
 
         for each in layers:
             each.update_tile(scale, player_entity, half_screen_width, half_screen_height)
-            if each.tile_x == 3 and each.tile_y == 0 and each.rep_rect.colliderect(self.representation):
-                self.y -= self.vertical_speed
-                self.x -= self.horizontal_speed
+            if each.tile_x < 4 and each.rep_rect.colliderect(self.representation):
+                self.y -= v_speed
+                self.vertical_speed = 0
                 break
 
-        self.vertical_speed = self.vertical_speed * 0.8
-        self.horizontal_speed = self.horizontal_speed * 0.8
+        self.x += h_speed
 
-    def up(self):
-        if abs(self.vertical_speed < 60):
-            self.vertical_walk -= 2
+        for each in layers:
+            each.update_tile(scale, player_entity, half_screen_width, half_screen_height)
+            if each.tile_x < 4 and each.rep_rect.colliderect(self.representation):
+                self.x -= h_speed
+                self.horizontal_speed = 0
+                break
 
-    def down(self):
-        if abs(self.vertical_speed < 60):
-            self.vertical_walk += 2
+        self.vertical_speed = int(self.vertical_speed * 0.9)
+        self.horizontal_speed = int(self.horizontal_speed * 0.9)
 
-    def left(self):
-        if abs(self.vertical_speed < 60):
-            self.horizontal_walk -= 2
+    def up(self, speed):
+        self.vertical_speed -= speed
 
-    def right(self):
-        if abs(self.vertical_speed < 60):
-            self.horizontal_walk += 2
+    def down(self, speed):
+        self.vertical_speed += speed
+
+    def left(self, speed):
+        self.horizontal_speed -= speed
+
+    def right(self, speed):
+        self.horizontal_speed += speed
 
 
 class GameData:
@@ -226,7 +228,6 @@ class GameButton:
 
     def goto_dest(self):
         self.destination()
-
 
 
 def current_milli_time():
