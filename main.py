@@ -1,9 +1,9 @@
 import sys
 
-from pygame import QUIT, MOUSEBUTTONDOWN
-
 from common_functions import *
 import json
+
+from entity_classes import *
 from options import options
 from editor import map_editor
 
@@ -34,30 +34,41 @@ def prepStuff():
     data = GameData()
     try:
         with open('settings.json', 'r') as f:
-            data.load_save_data(*json.load(f).values())
+            data.load_settings_data(*json.load(f).values())
     except Exception:
         pass
 
 
+button_dict = {
+    "Play": game_start,
+    "Options": options_menu,
+    "Editor": editor,
+    "Exit": exit_game
+}
+
 def main_menu():
 
     while True:
-
         bg = pygame.image.load('resources/img/bg_test.jpg')
         bg = pygame.transform.scale(bg, (data.width, data.height))
         data.screen.blit(bg, (0, 0))
         data.button_list = []
         heighttenth = data.height / 10
 
-        button_data = [('Play', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
-                        50, data.height - heighttenth, data.width / 10, heighttenth / 2, game_start),
-                       ('Options', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
-                       50 + data.width / 8, data.height - heighttenth, data.width / 10, heighttenth / 2, options_menu),
-                       ('Editor', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
-                       50 + 2 * data.width / 8, data.height - heighttenth, data.width / 10, heighttenth / 2, editor),
-                       ('Exit', data.default_font, data.WHITECOLOR, data.BLACKCOLOR, data.screen,
-                        data.width - data.width / 8 - 100, data.height - heighttenth, data.width / 10, heighttenth / 2, exit_game),
-                       ]
+        butt_font_color = Colors.WHITE_COLOR.get()
+        butt_bg_color = Colors.BLACK_COLOR.get()
+
+        button_data = []
+
+        offset = 0
+        for each in button_dict:
+            caller = button_dict[each]
+            if each == 'Exit': offset = data.width - data.width / 8 - 100
+            button_data.append(
+                (f'{each}', data.default_font, butt_font_color, butt_bg_color, data.screen,
+                 50 + offset, data.height - heighttenth, data.width * 0.1, heighttenth * 0.5, caller)
+            )
+            offset += data.width * 0.12
 
         # create butons
         for each in button_data:
@@ -92,8 +103,7 @@ def main_menu():
 
 if __name__ == '__main__':
     prepStuff()
-
     # FOR TESTING ONLY !
-    # game(data)
-
+    testing = True
+    if testing: editor()
     main_menu()
