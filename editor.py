@@ -47,3 +47,6 @@ def map_editor(data: GameData):
 
         # on screen tiles and rendering
         render_screen(data, player_tile_x, player_tile_y, player_entity)
+
+        pygame.display.update()
+        data.mainClock.tick(data.fps)

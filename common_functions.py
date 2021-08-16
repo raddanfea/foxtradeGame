@@ -77,10 +77,10 @@ def current_milli_time():
 
 def render_screen(data: GameData, player_tile_x: int, player_tile_y: int, player_entity: GameEntity):
     half_screen_height, half_screen_width = int(data.screen.get_width() * 0.5), int(data.screen.get_height() * 0.5)
+
     map_layer = data.map.get_near(half_screen_height, half_screen_width, player_tile_x, player_tile_y)
 
     # under layer
-    print(map_layer)
     for layer in map_layer:
         for each in layer:
             each.draw_entity(data.screen, data.screen, data.tile_maps, player_entity, half_screen_width, half_screen_height)

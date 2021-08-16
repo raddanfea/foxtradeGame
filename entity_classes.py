@@ -144,15 +144,16 @@ class GameData:
 class GameMap:
     def __init__(self, name):
         self.name = name
-        self.data = {"0": {"0": {"0": (0, 0, 0)}}}
+        self.data = {"0": {"0": {"0": GameEntity}}}
         self.entities = []
 
     def new_entity(self, x: int, y: int, height: EntityHeight, screen, color: Colors, scale: int,
                    tile_map_x: int, tile_map_y: int, tile_map: TileMap, anim_length: int, entity_type: EntityType):
 
-        self.entities.append(GameEntity(x, y, height, screen, color, scale, tile_map_x, tile_map_y, tile_map,
-                                        anim_length, entity_type))
-        return self.entities[-1]
+        entity = GameEntity(x, y, height, screen, color, scale, tile_map_x, tile_map_y, tile_map,
+                                             anim_length, entity_type)
+        self.data[str(height)][str(x)][str(y)] = entity
+        return entity
 
     def set_tile(self, h, x, y, tm, tx, ty):
         self.data.setdefault(str(h), {})
@@ -192,8 +193,8 @@ class GameMap:
             for y_each in range(p_y - y_dist, p_y + y_dist + 1):
                 for height_each in range(0, len(EntityHeight)):
                     try:
-                        tm, tx, ty = self.data[str(height_each)][str(x_each)][str(y_each)]
-                        near_tiles[height_each].append(self.data[str(height_each)][str(x_each)][str(y_each)])
+                        item = self.data[str(height_each)][str(x_each)][str(y_each)]
+                        near_tiles[height_each].append(item)
                     except:
                         pass
 
