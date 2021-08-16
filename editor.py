@@ -32,7 +32,7 @@ def map_editor(data: GameData):
     data.map.load_map()
 
     # player
-    player_entity = data.map.new_entity(0, 0, 0, data.screen, Colors.BLACK_COLOR.get(),
+    player_entity = data.map.new_entity(0, 0, 0, data.screen, Colors.WHITE_COLOR.get(),
                                         scale, 0, 0, 1, 0, EntityType.PLAYER)
 
     while running:

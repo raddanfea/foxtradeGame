@@ -1,3 +1,5 @@
+import pickle
+import zlib
 from enum import Enum, auto
 
 import pygame
@@ -55,7 +57,7 @@ class GameEntity:
 
     def draw_entity(self, screen, scale, tile_maps, player_entity, half_screen_width, half_screen_height):
         self.representation = pygame.Rect(self.screen.get_width() * 0.5, self.screen.get_height() * 0.5,
-                                          self.scale * 0.8, self.scale * 0.8)
+                                          self.scale, self.scale)
 
         if self.entity_type is not EntityType.PLAYER:
             screen.blit(tile_maps[self.tile_map][self.tile_map_x + self.anim_state][self.tile_map_y],

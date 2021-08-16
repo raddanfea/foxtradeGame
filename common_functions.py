@@ -80,9 +80,10 @@ def render_screen(data: GameData, player_tile_x: int, player_tile_y: int, player
     map_layer = data.map.get_near(half_screen_height, half_screen_width, player_tile_x, player_tile_y)
 
     # under layer
+    print(map_layer)
     for layer in map_layer:
         for each in layer:
-            each.blit_tile(data.screen, data.tile_maps[0], player_entity, each.scale, half_screen_width, half_screen_height)
+            each.draw_entity(data.screen, data.screen, data.tile_maps, player_entity, half_screen_width, half_screen_height)
 
 
 def check_collisons(current_map, player_tile_x, player_tile_y, scale, player_entity, half_screen_width,
