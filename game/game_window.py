@@ -3,11 +3,12 @@ import math
 
 import pygame, sys, time, random
 from pygame import K_w, K_s, K_a, K_d, QUIT, K_ESCAPE, KEYDOWN, K_t, USEREVENT, K_m, K_KP_PLUS, K_KP_MINUS
-from classes import KeyEventsObj, imgColorToType, point_intermediates
+from classes import KeyEventsObj
 from game.debug_gui import debug_gui
 from game.player_data import PlayerData
 from game.settings import prepStuff
-from game.small_functions import drawCursor
+from game.small_functions import drawCursor, imgColorToType, point_intermediates
+from game.trade_classes import shopData
 from game.trade_window import trade_window
 from container_classes import MapClass, MusicClass
 
@@ -25,6 +26,7 @@ music.loadNext()
 
 offset_real_x = 0
 offset_real_y = 0
+mouse_pos = 0, 0
 
 key_events = KeyEventsObj()
 playerData = PlayerData()
@@ -32,7 +34,7 @@ playerData = PlayerData()
 key_events.add_user_event("movement_speed", playerData.movement_speed)
 key_events.add_user_event("player_anim_speed", 200)
 
-mouse_pos = 0, 0
+shops = [shopData() for x in range(30)]
 
 # noinspection PyTypeChecker
 display.blit(map_data.mapImg, (0, 0), (offset_real_x, offset_real_y, *display.get_size()))
@@ -96,7 +98,9 @@ while True:
                 pygame.quit()
                 sys.exit()
             elif event.key == K_t:
-                trade_window(gameData.screen, playerData, gameData)
+                locationId = imgColorToType(map_data.mapWalls.get_at(player_pos))-1
+                if locationId >= 0:
+                    trade_window(gameData.screen, playerData, gameData, shops[locationId])
             elif event.key == K_m:
                 music.loadNext()
                 print(music.current_name)

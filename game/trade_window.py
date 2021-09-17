@@ -5,10 +5,10 @@ from game.classes import KeyEventsObj
 from game.small_functions import drawCursor
 from game.string_gen import SpecialItem
 from game.text_box import textBox
-from game.trade_classes import inventoryBox, shopData
+from game.trade_classes import inventoryBox
 
 
-def trade_window(screen, playerData, gameData):
+def trade_window(screen, playerData, gameData, shopObject):
     trade_w_run = True
     scale = 0.2
 
@@ -20,8 +20,6 @@ def trade_window(screen, playerData, gameData):
 
     text_box = textBox(screen, scale)
     text_box.setText("")
-
-    shopObject = shopData()
 
     npc_tradebox = inventoryBox(screen, shopObject, scale)
     player_tradebox = inventoryBox(screen, playerData, scale)

@@ -68,8 +68,8 @@ class inventoryBox:
 
 
 class GenericTradeItem:
-    def __init__(self, name: str, dprice: float, type: str, icon, shop_id: int):
-        self.shop_id = shop_id
+    def __init__(self, name: str, dprice: float, type: str, icon, item_id: int):
+        self.item_id = item_id
         self.name = name
         self.default_price = dprice
         self.item_type = type
@@ -91,7 +91,7 @@ class InventoryHandler:
     def __init__(self, owner_class):
         self.owner = owner_class.shop_id
         self.owner_class = owner_class
-        self.all_items = [GenericTradeItem(*each, shop_id=x) for x, each in enumerate(GENERIC_ITEMS)]
+        self.all_items = [GenericTradeItem(*each, item_id=x) for x, each in enumerate(GENERIC_ITEMS)]
         self.counts = owner_class.inventory
 
     def updateInventory(self):

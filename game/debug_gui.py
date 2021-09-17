@@ -1,6 +1,7 @@
 import pygame
 
-from game.classes import draw_text, imgColorToType
+from game.classes import draw_text
+from game.small_functions import imgColorToType
 
 
 def debug_gui(display, offset_real_x, offset_real_y, mousepos_x, mousepos_y, map_data, player_pos, font, clock):

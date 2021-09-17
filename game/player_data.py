@@ -46,14 +46,14 @@ class PlayerData:
 
     def buy(self, shopObject):
         if self.trade_selected:
-            if self.gold_coin > self.trade_selected.default_price and shopObject.inventory[self.trade_selected.shop_id]:
+            if self.gold_coin > self.trade_selected.default_price and shopObject.inventory[self.trade_selected.item_id]:
                 self.gold_coin = round(self.gold_coin - self.trade_selected.default_price, 2)
-                self.inventory[self.trade_selected.shop_id] += 1
-                shopObject.inventory[self.trade_selected.shop_id] -= 1
+                self.inventory[self.trade_selected.item_id] += 1
+                shopObject.inventory[self.trade_selected.item_id] -= 1
 
     def sell(self, shopObject):
         if self.trade_selected:
-            if self.inventory[self.trade_selected.shop_id] > 0:
+            if self.inventory[self.trade_selected.item_id] > 0:
                 self.gold_coin = round(self.gold_coin + self.trade_selected.default_price, 2)
-                self.inventory[self.trade_selected.shop_id] -= 1
-                shopObject.inventory[self.trade_selected.shop_id] += 1
+                self.inventory[self.trade_selected.item_id] -= 1
+                shopObject.inventory[self.trade_selected.item_id] += 1

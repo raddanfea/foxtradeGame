@@ -33,21 +33,6 @@ def draw_text(text, font, color, surface, x, y, w, h, center=False):
     surface.blit(textobj, textrect)
 
 
-def imgColorToType(color):
-    colors = {
-        (0, 0, 0, 255): 0,         # unpassable
-        (255, 255, 255, 255): 1,   # walkable
-        (255, 0, 0, 255): 2,       # town
-    }
-    return colors[tuple(color)]
 
-
-def point_intermediates(p1, p2, nb_points=8):
-    x_spacing = (p2[0] - p1[0]) / (nb_points + 1)
-    y_spacing = (p2[1] - p1[1]) / (nb_points + 1)
-
-    return [
-        [int(p1[0] + i * x_spacing), int(p1[1] + i * y_spacing)]
-        for i in range(1, nb_points + 1)]
 
 
