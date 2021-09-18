@@ -106,3 +106,8 @@ class shopData:
     def __init__(self, shop_id: int = 1):
         self.shop_id = shop_id
         self.inventory = [10 for i in range(99)]
+
+
+class AllShopData:
+    def __init__(self):
+        self.shops = [shopData() for i in range(10)]

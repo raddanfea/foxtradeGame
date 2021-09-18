@@ -17,6 +17,13 @@ class PlayerData:
         self.run = load_tileset('assets/character/run.png', 80, 80)
         self.animstate = 0
         self.last_dir = 0
+        self.player_pos = (50, 50)
+
+    def getSave(self):
+        return self.gold_coin, self.tails_coin, self.tails, self.inventory, self.player_pos
+
+    def loadSave(self, args):
+        self.gold_coin, self.tails_coin, self.tails, self.inventory, self.player_pos = args
 
     def resetDirection(self):
         self.last_dir = 0
