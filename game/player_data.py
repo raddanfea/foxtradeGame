@@ -1,6 +1,7 @@
 from pygame.transform import flip
 
 from game.small_functions import load_tileset
+from game.trade_classes import shopData
 
 
 class PlayerData:
@@ -51,16 +52,16 @@ class PlayerData:
             if self.animstate >= len(self.run)-1: self.animstate = -1
             self.animstate += 1
 
-    def buy(self, shopObject):
+    def buy(self, shopObject: shopData):
         if self.trade_selected:
-            if self.gold_coin > self.trade_selected.default_price and shopObject.inventory[self.trade_selected.item_id]:
-                self.gold_coin = round(self.gold_coin - self.trade_selected.default_price, 2)
+            if self.gold_coin > self.trade_selected.current_price and shopObject.inventory[self.trade_selected.item_id]:
+                self.gold_coin = round(self.gold_coin - self.trade_selected.current_price, 2)
                 self.inventory[self.trade_selected.item_id] += 1
                 shopObject.inventory[self.trade_selected.item_id] -= 1
 
     def sell(self, shopObject):
         if self.trade_selected:
             if self.inventory[self.trade_selected.item_id] > 0:
-                self.gold_coin = round(self.gold_coin + self.trade_selected.default_price, 2)
+                self.gold_coin = round(self.gold_coin + self.trade_selected.current_price * 0.9, 2)
                 self.inventory[self.trade_selected.item_id] -= 1
                 shopObject.inventory[self.trade_selected.item_id] += 1

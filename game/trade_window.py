@@ -1,14 +1,15 @@
 import pygame
-from pygame import QUIT, KEYDOWN, K_ESCAPE, K_r, K_z, K_o, K_p, USEREVENT
+from pygame import QUIT, KEYDOWN, K_ESCAPE, K_r, K_z, K_o, K_p, USEREVENT, K_m
 
+from game.VARS import TABULATOR
 from game.classes import KeyEventsObj
 from game.small_functions import drawCursor
 from game.string_gen import SpecialItem
 from game.text_box import textBox
-from game.trade_classes import inventoryBox
+from game.trade_classes import inventoryBox, shopData
 
 
-def trade_window(screen, playerData, gameData, shopObject):
+def trade_window(screen, playerData, gameData, shopObject: shopData):
     trade_w_run = True
     scale = 0.2
 
@@ -26,8 +27,6 @@ def trade_window(screen, playerData, gameData, shopObject):
 
     key_events = KeyEventsObj()
     key_events.add_user_event("text_speed", 30)
-
-
 
     while trade_w_run:
         mouse_pos = pygame.mouse.get_pos()
@@ -54,19 +53,25 @@ def trade_window(screen, playerData, gameData, shopObject):
                     playerData.buy(shopObject)
                 elif event.key == K_p:
                     playerData.sell(shopObject)
+                elif event.key == K_m:
+                    shopObject.addModifier(0, 1.1)
 
             elif event.type == key_events.user_events['text_speed']:
                 text_box.text_step()
 
             elif event.type == pygame.MOUSEBUTTONUP:
                 if event.button == 1:
-                    for each in npc_tradebox.items:
+                    for x, each in enumerate(npc_tradebox.items):
                         if each[1].checkCollison(mouse_pos):
-                            playerData.sellOrBuy, playerData.trade_selected = 0, each[1]
-                            text_box.setText(f'Buy {each[1].name}      Price: {each[1].default_price}')
-                    for each in player_tradebox.items:
+                            npc_tradebox.items[x][1].calculatePrice(shopObject.modifiers)
+                            playerData.sellOrBuy, playerData.trade_selected = 0, npc_tradebox.items[x][1]
+                            text_box.setText(f'Buy {each[1].name}{TABULATOR}'
+                                             f'Price: {npc_tradebox.items[x][1].current_price}')
+                    for x, each in enumerate(player_tradebox.items):
                         if each[1].checkCollison(mouse_pos):
-                            playerData.sellOrBuy, playerData.trade_selected = 1, each[1]
-                            text_box.setText(f'Sell {each[1].name}      Price: {each[1].default_price} ')
+                            player_tradebox.items[x][1].calculatePrice(shopObject.modifiers)
+                            playerData.sellOrBuy, playerData.trade_selected = 1, player_tradebox.items[x][1]
+                            text_box.setText(f'Sell {each[1].name}{TABULATOR}'
+                                             f'Price: {round(player_tradebox.items[x][1].current_price * 0.9, 2)} ')
 
         pygame.display.update()

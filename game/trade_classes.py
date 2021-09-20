@@ -72,6 +72,7 @@ class GenericTradeItem:
         self.item_id = item_id
         self.name = name
         self.default_price = dprice
+        self.current_price = dprice
         self.item_type = type
         self.item_icon = pygame.image.load(f'assets/items/{icon}.png').convert()
         self.item_icon.set_colorkey((255, 255, 255))
@@ -83,13 +84,21 @@ class GenericTradeItem:
         except:
             return None
 
+    def calculatePrice(self, modifiers):
+        self.current_price = self.default_price
+        for each in modifiers:
+            if each.item_id == self.item_id:
+                self.current_price = self.current_price * each.modif
+        self.current_price = round(self.current_price, 2)
+        print(self.current_price)
+
     def __str__(self):
         return f'{self.name} {self.default_price} {self.item_type} {self.item_icon}'
 
 
 class InventoryHandler:
     def __init__(self, owner_class):
-        self.owner = owner_class.shop_id
+        self.owner_id = owner_class.shop_id
         self.owner_class = owner_class
         self.all_items = [GenericTradeItem(*each, item_id=x) for x, each in enumerate(GENERIC_ITEMS)]
         self.counts = owner_class.inventory
@@ -102,10 +111,23 @@ class InventoryHandler:
         return [(self.counts[x], each) for x, each in enumerate(self.all_items)]
 
 
+class Modifier:
+    def __init__(self, item_id, modif=1):
+        self.item_id = item_id
+        self.modif = modif
+
+
 class shopData:
     def __init__(self, shop_id: int = 1):
         self.shop_id = shop_id
         self.inventory = [10 for i in range(99)]
+        self.modifiers = []
+
+    def addModifier(self, item_id, modifier):
+        self.modifiers.append(Modifier(item_id, modifier))
+
+    def removeModifier(self, item_id, modifier):
+        self.modifiers.remove(Modifier(item_id, modifier))
 
 
 class AllShopData:

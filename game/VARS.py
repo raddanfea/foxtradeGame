@@ -21,7 +21,6 @@ SPECIFIC_OBJECTS = {
         "waterskin", "tinderbox", "set of tools"]
 }
 
-
 INTRODUCTIONS = ["This is ", "It is ", "You see ", "It's ", "You are shown ", "Before you is "]
 
 RARITY = {
@@ -62,7 +61,6 @@ WORDS_IS = ["seems to be", "appears to be", "looks to be", "is"]
 WORDS_WAS = ["seems to have been", "appears to have been", "looks to have been", "was"]
 WORDS_COLORED = ["colored ", "tinted ", ""]
 
-
 # NAME, PRICE, TYPE, ICON
 GENERIC_ITEMS = [
     ("Rations", 0.5, "Food", "bread"),
@@ -73,3 +71,5 @@ GENERIC_ITEMS = [
     ("Silk", 10, "Trade", "bread"),
     ("Gold", 10, "Gold", "bread"),
 ]
+
+TABULATOR = '        '

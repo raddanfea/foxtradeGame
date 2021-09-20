@@ -65,7 +65,7 @@ def game_window():
 
         # night effect
         day_night_shader = day_night_time_to_shader(day_night_time)
-        night.fill((2*day_night_shader, 2*day_night_shader, day_night_shader))
+        night.fill((1.5*day_night_shader, 2*day_night_shader, 1.5*day_night_shader))
 
         display.blit(night, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
 

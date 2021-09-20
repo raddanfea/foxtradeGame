@@ -30,6 +30,8 @@
         <list>
           <option value="N801" />
           <option value="N802" />
+          <option value="N803" />
+          <option value="N806" />
         </list>
       </option>
     </inspection_tool>
@@ -37,6 +39,8 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="feaweb.src.feaweb.urls.pages" />
+          <option value="bool.key" />
+          <option value="bool.inventory" />
         </list>
       </option>
     </inspection_tool>
