@@ -39,3 +39,16 @@ def point_intermediates(p1, p2, nb_points=8):
     return [
         [int(p1[0] + i * x_spacing), int(p1[1] + i * y_spacing)]
         for i in range(1, nb_points + 1)]
+
+
+def day_night_time_to_shader(time):
+    if time < 25:
+        return 0
+    if time < 50:
+        return time - 25
+    if time < 60:
+        return 25
+    if time < 85:
+        return 85 - time
+    else:
+        return 0

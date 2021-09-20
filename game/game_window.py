@@ -8,7 +8,7 @@ from game.debug_gui import debug_gui
 from game.player_data import PlayerData
 from game.save_class import SaveClass
 from game.settings import prepStuff
-from game.small_functions import drawCursor, imgColorToType, point_intermediates
+from game.small_functions import drawCursor, imgColorToType, point_intermediates, day_night_time_to_shader
 from game.trade_classes import shopData, AllShopData
 from game.trade_window import trade_window
 from container_classes import MapClass, MusicClass
@@ -21,6 +21,7 @@ def game_window():
     shops, playerData = saveData.load()
 
     display = pygame.Surface(gameData.screen.get_size())
+    night = pygame.surface.Surface(display.get_size())
     font = gameData.default_font
 
     map_data = MapClass()
@@ -35,17 +36,14 @@ def game_window():
 
     key_events.add_user_event("movement_speed", playerData.movement_speed)
     key_events.add_user_event("player_anim_speed", 200)
+    key_events.add_user_event("day_night_clock", 150)
 
     # noinspection PyTypeChecker
     display.blit(map_data.mapImg, (0, 0), (offset_real_x, offset_real_y, *display.get_size()))
 
-    # 0 standing, 1 pathing, 2 moving, 3 movement anim, 4 frozen
-    state = 0
-
-    route_path = []
-    debug = True
-
     intermediates = []
+
+    day_night_time = 0
 
     while True:
 
@@ -57,36 +55,42 @@ def game_window():
             int(offset_real_x + mousepos_x), int(offset_real_y + mousepos_y)
 
         display.fill((255, 255, 255))
+
         # noinspection PyTypeChecker
         display.blit(map_data.mapImg, (0, 0), (offset_real_x, offset_real_y, *display.get_size()))
 
-        drawCursor(display, gameData, *mouse_pos)
-
         # draw character
         display.blit(playerData.getBlit(intermediates, p_x),
-                     (int(display.get_width() * 0.5)-40, int(display.get_height() * 0.5)-40))
+                     (int(display.get_width() * 0.5) - 40, int(display.get_height() * 0.5) - 40))
+
+        # night effect
+        day_night_shader = day_night_time_to_shader(day_night_time)
+        night.fill((2*day_night_shader, 2*day_night_shader, day_night_shader))
+
+        display.blit(night, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+
+        drawCursor(display, gameData, *mouse_pos)
 
         # debug gui
         debug_gui(display, offset_real_x, offset_real_y, mousepos_x, mousepos_y,
-                  map_data, player_pos, font, gameData.mainClock)
+                  map_data, player_pos, font, gameData.mainClock, day_night_time)
 
-        if state == 0:
-            if pygame.key.get_pressed()[K_w]:
+        if pygame.key.get_pressed()[K_w]:
+            intermediates = []
+            if imgColorToType(map_data.mapWalls.get_at((p_x, p_y - 1))):
+                offset_real_y -= 1
+        if pygame.key.get_pressed()[K_s]:
+            if imgColorToType(map_data.mapWalls.get_at((p_x, p_y + 1))):
                 intermediates = []
-                if imgColorToType(map_data.mapWalls.get_at((p_x, p_y - 1))):
-                    offset_real_y -= 1
-            if pygame.key.get_pressed()[K_s]:
-                if imgColorToType(map_data.mapWalls.get_at((p_x, p_y + 1))):
-                    intermediates = []
-                    offset_real_y -= -1
-            if pygame.key.get_pressed()[K_a]:
-                if imgColorToType(map_data.mapWalls.get_at((p_x - 1, p_y))):
-                    intermediates = []
-                    offset_real_x -= 1
-            if pygame.key.get_pressed()[K_d]:
-                if imgColorToType(map_data.mapWalls.get_at((p_x + 1, p_y))):
-                    intermediates = []
-                    offset_real_x -= -1
+                offset_real_y -= -1
+        if pygame.key.get_pressed()[K_a]:
+            if imgColorToType(map_data.mapWalls.get_at((p_x - 1, p_y))):
+                intermediates = []
+                offset_real_x -= 1
+        if pygame.key.get_pressed()[K_d]:
+            if imgColorToType(map_data.mapWalls.get_at((p_x + 1, p_y))):
+                intermediates = []
+                offset_real_x -= -1
 
         for event in pygame.event.get():
             if event.type == QUIT:
@@ -103,7 +107,7 @@ def game_window():
                     pygame.quit()
                     sys.exit()
                 elif event.key == K_t:
-                    locationId = imgColorToType(map_data.mapWalls.get_at(player_pos))-1
+                    locationId = imgColorToType(map_data.mapWalls.get_at(player_pos)) - 1
                     if locationId >= 0:
                         trade_window(gameData.screen, playerData, gameData, shops.shops[locationId])
                 elif event.key == K_m:
@@ -135,6 +139,12 @@ def game_window():
 
             if event.type == key_events.user_events['player_anim_speed']:
                 playerData.nextState(intermediates)
+
+            if event.type == key_events.user_events['day_night_clock'] and intermediates:
+                if day_night_time >= 100:
+                    day_night_time = 0
+                else:
+                    day_night_time += 1
 
             if event.type == key_events.user_events['movement_speed']:
                 if intermediates:
