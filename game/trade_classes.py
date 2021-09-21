@@ -141,4 +141,15 @@ class shopData:
 
 class AllShopData:
     def __init__(self):
-        self.shops = [shopData() for i in range(10)]
+        self.shops = [shopData() for i in range(99)]
+
+    def tickModifiers(self):
+        for shop in self.shops:
+            for x, each in enumerate(range(len(shop.modifiers))):
+                if random.random() < 0.4:
+                    if random.random() < 0.5:
+                        if shop.modifiers[x] < 2:
+                            shop.modifiers[x] = round(shop.modifiers[x] + 0.1, 1)
+                    else:
+                        if shop.modifiers[x] > 0.4:
+                            shop.modifiers[x] = round(shop.modifiers[x] - 0.1, 1)

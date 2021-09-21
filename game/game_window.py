@@ -126,8 +126,7 @@ def game_window():
             if event.type == key_events.user_events['day_night_clock'] and intermediates:
                 if day_night_time >= 100:
                     day_night_time = 0
-                    for each in shops.shops:
-                        each.tickModifiers()
+                    shops.tickModifiers()
                 else:
                     day_night_time += 1
 
