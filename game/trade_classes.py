@@ -12,7 +12,7 @@ class inventoryBox:
         self.offset = 30
         self.screen = screen
         self.player = player
-        self.inventoryHandler = InventoryHandler(player)    # 0 = player
+        self.inventoryHandler = InventoryHandler(player)  # 0 = player
 
         if not self.player.shop_id:
             self.x = int(self.screen.get_width() - (self.screen.get_width() * width))
@@ -47,7 +47,8 @@ class inventoryBox:
         self.screen.blit(self.bg, bg_pos)
 
         if not self.player.shop_id:
-            draw_text(color=black, font=self.font, surface=self.screen, text=f'{self.player.gold_coin} Gold', center=False,
+            draw_text(color=black, font=self.font, surface=self.screen, text=f'{self.player.gold_coin} Gold',
+                      center=False,
                       x=self.x + self.offset * 2, y=self.offset * 1, w=self.w - self.offset * 2, h=50)
 
         has_items = [x for x in self.items if x[0] != 0]
@@ -86,9 +87,9 @@ class GenericTradeItem:
 
     def calculatePrice(self, modifiers):
         self.current_price = self.default_price
-        for each in modifiers:
-            if each.item_id == self.item_id:
-                self.current_price = self.current_price * each.modif
+        for x, each in enumerate(modifiers):
+            if x == self.item_id:
+                self.current_price = self.current_price * each
         self.current_price = round(self.current_price, 2)
         print(self.current_price)
 
@@ -111,23 +112,31 @@ class InventoryHandler:
         return [(self.counts[x], each) for x, each in enumerate(self.all_items)]
 
 
-class Modifier:
-    def __init__(self, item_id, modif=1):
-        self.item_id = item_id
-        self.modif = modif
-
-
 class shopData:
     def __init__(self, shop_id: int = 1):
         self.shop_id = shop_id
-        self.inventory = [10 for i in range(99)]
-        self.modifiers = []
+        self.inventory = [random.randint(5, 20) for i in range(200)]
+        self.modifiers = [1.0 for i in range(100)]
+        self.inventory_defaults = [10 for i in range(200)]
 
-    def addModifier(self, item_id, modifier):
-        self.modifiers.append(Modifier(item_id, modifier))
+    def addModifier(self, item_id: int, modifier: float):
+        self.modifiers[item_id] = modifier
 
-    def removeModifier(self, item_id, modifier):
-        self.modifiers.remove(Modifier(item_id, modifier))
+    def tickModifiers(self):
+        for x, each in enumerate(range(len(self.modifiers))):
+            if random.random() < 0.4:
+                if random.random() < 0.5:
+                    if self.modifiers[x] < 1.6:
+                        self.modifiers[x] = round(self.modifiers[x] + 0.1, 1)
+                else:
+                    if self.modifiers[x] > 0.4:
+                        self.modifiers[x] = round(self.modifiers[x] - 0.1, 1)
+
+    def getModifiersForItemId(self, item_id):
+        return self.modifiers[item_id]
+
+    def removeModifier(self, item_id):
+        self.modifiers[item_id] = 1.0
 
 
 class AllShopData:

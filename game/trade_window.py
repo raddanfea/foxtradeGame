@@ -1,5 +1,5 @@
 import pygame
-from pygame import QUIT, KEYDOWN, K_ESCAPE, K_r, K_z, K_o, K_p, USEREVENT, K_m
+from pygame import QUIT, KEYDOWN, K_ESCAPE, K_r, K_z, K_o, K_p, USEREVENT, K_m, K_l
 
 from game.VARS import TABULATOR
 from game.classes import KeyEventsObj
@@ -55,6 +55,8 @@ def trade_window(screen, playerData, gameData, shopObject: shopData):
                     playerData.sell(shopObject)
                 elif event.key == K_m:
                     shopObject.addModifier(0, 1.1)
+                elif event.key == K_l:
+                    shopObject.tickModifiers()
 
             elif event.type == key_events.user_events['text_speed']:
                 text_box.text_step()
@@ -65,13 +67,19 @@ def trade_window(screen, playerData, gameData, shopObject: shopData):
                         if each[1].checkCollison(mouse_pos):
                             npc_tradebox.items[x][1].calculatePrice(shopObject.modifiers)
                             playerData.sellOrBuy, playerData.trade_selected = 0, npc_tradebox.items[x][1]
-                            text_box.setText(f'Buy {each[1].name}{TABULATOR}'
-                                             f'Price: {npc_tradebox.items[x][1].current_price}')
+                            text_box.setText(f'Buy {each[1].name}'
+                                             f'{TABULATOR}'
+                                             f'Price: {npc_tradebox.items[x][1].current_price}'
+                                             f'{TABULATOR}'
+                                             f'Modifier: {shopObject.getModifiersForItemId(x)}')
                     for x, each in enumerate(player_tradebox.items):
                         if each[1].checkCollison(mouse_pos):
                             player_tradebox.items[x][1].calculatePrice(shopObject.modifiers)
                             playerData.sellOrBuy, playerData.trade_selected = 1, player_tradebox.items[x][1]
-                            text_box.setText(f'Sell {each[1].name}{TABULATOR}'
-                                             f'Price: {round(player_tradebox.items[x][1].current_price * 0.9, 2)} ')
+                            text_box.setText(f'Sell {each[1].name}'
+                                             f'{TABULATOR}'
+                                             f'Price: {round(player_tradebox.items[x][1].current_price * 0.9, 2)}'
+                                             f'{TABULATOR}'                                        
+                                             f'Modifier: {shopObject.getModifiersForItemId(x)}')
 
         pygame.display.update()

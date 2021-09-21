@@ -43,4 +43,25 @@ class MusicClass:
     def setVol(self, vol):
         pygame.mixer.music.set_volume(vol)
 
+    def subVol(self):
+        if self.getVol() >= 0.3:
+            vol = round((self.getVol() * 100 - 5) / 100, 2)
+        else:
+            vol = round((self.getVol() * 100 - 1) / 100, 2)
+
+        if vol <= 0:
+            vol = 0.0
+        self.setVol(vol)
+        return vol
+
+    def addVol(self):
+        if self.getVol() >= 0.3:
+            vol = round((self.getVol() * 100 + 5) / 100, 2)
+        else:
+            vol = round((self.getVol() * 100 + 1.3) / 100, 2)
+
+        if vol >= 1:
+            vol = 1.0
+        self.setVol(vol)
+        return vol
 

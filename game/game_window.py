@@ -115,27 +115,10 @@ def game_window():
                     print(music.current_name)
 
                 elif event.key == K_KP_PLUS:
-                    if music.getVol() >= 0.2:
-                        vol = round((music.getVol() * 100 + 5) / 100, 2)
-                    else:
-                        vol = round((music.getVol() * 100 + 1.5) / 100, 2)
-
-                    if vol >= 1:
-                        vol = 1.0
-                    music.setVol(vol)
-                    gameData.music_volume = vol
+                    gameData.music_volume = music.addVol()
 
                 elif event.key == K_KP_MINUS:
-                    if music.getVol() >= 0.2:
-                        vol = round((music.getVol() * 100 - 5) / 100, 2)
-                    else:
-                        vol = round((music.getVol() * 100 - 1.5) / 100, 2)
-
-                    if vol <= 0:
-                        vol = 0.0
-
-                    music.setVol(vol)
-                    gameData.music_volume = vol
+                    gameData.music_volume = music.subVol()
 
             if event.type == key_events.user_events['player_anim_speed']:
                 playerData.nextState(intermediates)
@@ -143,6 +126,8 @@ def game_window():
             if event.type == key_events.user_events['day_night_clock'] and intermediates:
                 if day_night_time >= 100:
                     day_night_time = 0
+                    for each in shops.shops:
+                        each.tickModifiers()
                 else:
                     day_night_time += 1
 

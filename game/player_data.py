@@ -12,7 +12,7 @@ class PlayerData:
         self.tails = 0
         self.sellOrBuy = None
         self.trade_selected = None
-        self.inventory = [0 for i in range(0, 99)]
+        self.inventory = [0 for i in range(0, 200)]
         self.movement_speed = 30
         self.idle = load_tileset('assets/character/idle.png', 80, 80)
         self.run = load_tileset('assets/character/run.png', 80, 80)
