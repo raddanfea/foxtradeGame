@@ -130,10 +130,11 @@ class shopData:
             if random.random() < 0.6:
                 if self.inventory[x] < self.item_target_amounts[x]:
                     self.inventory[x] += \
-                        random.randint(0, int(self.item_target_amounts[x] * 0.1) + 1)
+                        random.randint(- 2, int(self.item_target_amounts[x] * 0.1) + 2)
                 else:
                     self.inventory[x] -= \
-                        random.randint(0, int(self.item_target_amounts[x] * 0.1) + 1)
+                        random.randint(- 2, int(self.item_target_amounts[x] * 0.1) + 2)
+                if self.inventory[x] < 0: self.inventory[x] = 0
 
         self.calculateModifiers()
 

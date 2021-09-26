@@ -35,7 +35,7 @@ class textBox:
         chars = [x for x in self.text]
         chars = chars[:len(self.text) - self.text_state]
 
-        line_width = int((self.screen.get_width() - self.squish_offset * 2) / self.font_size * 2.8)
+        line_width = int((self.screen.get_width() - self.squish_offset * 2) / self.font_size * 2.7)
         text_lines = [[] for x in range(line_width)]
         prev_line = 0
         for x, each in enumerate(chars):
@@ -59,7 +59,7 @@ class textBox:
 
             self.screen.blit(textobj, textrect)
 
-    def setText(self, text):
+    def setText(self, text, is_new=True):
         self.drawBox()
-        self.text_state = len(text)
+        if is_new: self.text_state = len(text)
         self.text = text
