@@ -69,10 +69,11 @@ class inventoryBox:
 
 
 class GenericTradeItem:
-    def __init__(self, name: str, dprice: float, type: str, icon, item_id: int):
+    def __init__(self, name: str, dprice: float, type: str, icon, d_amount: int, item_id: int):
         self.item_id = item_id
         self.name = name
         self.default_price = dprice
+        self.default_amount = d_amount
         self.current_price = dprice
         self.item_type = type
         self.item_icon = pygame.image.load(f'assets/items/{icon}.png').convert()
@@ -91,7 +92,6 @@ class GenericTradeItem:
             if x == self.item_id:
                 self.current_price = self.current_price * each
         self.current_price = round(self.current_price, 2)
-        print(self.current_price)
 
     def __str__(self):
         return f'{self.name} {self.default_price} {self.item_type} {self.item_icon}'
@@ -104,33 +104,50 @@ class InventoryHandler:
         self.all_items = [GenericTradeItem(*each, item_id=x) for x, each in enumerate(GENERIC_ITEMS)]
         self.counts = owner_class.inventory
 
-    def updateInventory(self):
-        self.counts = self.owner_class.inventory
-
     def getInventory(self):
-        self.updateInventory()
         return [(self.counts[x], each) for x, each in enumerate(self.all_items)]
 
 
 class shopData:
     def __init__(self, shop_id: int = 1):
         self.shop_id = shop_id
-        self.inventory = [random.randint(5, 20) for i in range(200)]
+        self.inventory = [99 for i in range(200)]
         self.modifiers = [1.0 for i in range(100)]
-        self.inventory_defaults = [10 for i in range(200)]
+        self.item_target_amounts = [99 for i in range(100)]
+
+    def setupItemAmounts(self, shop_size_mod):
+        if self.shop_id:
+            tamountbuffer = [int(each[-1]) for each in GENERIC_ITEMS]
+            for x, each in enumerate(tamountbuffer):
+                self.item_target_amounts[x] = tamountbuffer[x] * shop_size_mod
+                self.inventory[x] = int(self.item_target_amounts[x] * (random.randint(0, 7) * 0.1 + 0.7))
 
     def addModifier(self, item_id: int, modifier: float):
         self.modifiers[item_id] = modifier
 
     def tickModifiers(self):
-        for x, each in enumerate(range(len(self.modifiers))):
-            if random.random() < 0.4:
-                if random.random() < 0.5:
-                    if self.modifiers[x] < 1.6:
-                        self.modifiers[x] = round(self.modifiers[x] + 0.1, 1)
+        for x, each in enumerate(self.item_target_amounts):
+            if random.random() < 0.6:
+                if self.inventory[x] < self.item_target_amounts[x]:
+                    self.inventory[x] += \
+                        random.randint(0, int(self.item_target_amounts[x] * 0.1) + 1)
                 else:
-                    if self.modifiers[x] > 0.4:
-                        self.modifiers[x] = round(self.modifiers[x] - 0.1, 1)
+                    self.inventory[x] -= \
+                        random.randint(0, int(self.item_target_amounts[x] * 0.1) + 1)
+
+        self.calculateModifiers()
+
+    def calculateModifiers(self):
+        for x, each in enumerate(range(len(self.modifiers))):
+            relation = round(self.inventory[x] / self.item_target_amounts[x], 1)
+            if relation > 2: relation = 2
+            elif relation < 0.5: relation = 0.5
+
+            if relation > 1: modifier = round(1 / relation, 1)
+            elif relation < 1: modifier = round(1 - relation + 1, 1)
+            else: modifier = 1.0
+
+            self.modifiers[x] = modifier
 
     def getModifiersForItemId(self, item_id):
         return self.modifiers[item_id]
@@ -141,15 +158,20 @@ class shopData:
 
 class AllShopData:
     def __init__(self):
-        self.shops = [shopData() for i in range(99)]
+        self.shops = [shopData(i) for i in range(99)]
+        self.setTargetAmounts()
+
+    def setTargetAmounts(self):
+        shop_mod = [1 for i in range(200)]
+        shop_mod[2] = 5
+        for x, each in enumerate(self.shops):
+            each.setupItemAmounts(shop_mod[x])
 
     def tickModifiers(self):
         for shop in self.shops:
-            for x, each in enumerate(range(len(shop.modifiers))):
-                if random.random() < 0.4:
-                    if random.random() < 0.5:
-                        if shop.modifiers[x] < 2:
-                            shop.modifiers[x] = round(shop.modifiers[x] + 0.1, 1)
-                    else:
-                        if shop.modifiers[x] > 0.4:
-                            shop.modifiers[x] = round(shop.modifiers[x] - 0.1, 1)
+            shop.tickModifiers()
+        self.calculateModifiers()
+
+    def calculateModifiers(self):
+        for shop in self.shops:
+            shop.calculateModifiers()

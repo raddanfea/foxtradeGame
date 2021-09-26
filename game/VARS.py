@@ -1,3 +1,4 @@
+from collections import defaultdict
 from enum import Enum, auto
 
 TYPES = {
@@ -61,15 +62,16 @@ WORDS_IS = ["seems to be", "appears to be", "looks to be", "is"]
 WORDS_WAS = ["seems to have been", "appears to have been", "looks to have been", "was"]
 WORDS_COLORED = ["colored ", "tinted ", ""]
 
-# NAME, PRICE, TYPE, ICON
+# NAME, PRICE, TYPE, ICON, DEFAULT AMOUNT
 GENERIC_ITEMS = [
-    ("Rations", 0.5, "Food", "bread"),
-    ("Waterskin", 0.2, "Food", "bread"),
-    ("Salt", 0.5, "Trade", "bread"),
-    ("Spice", 2, "Trade", "bread"),
-    ("Silverware", 5, "Trade", "bread"),
-    ("Silk", 10, "Trade", "bread"),
-    ("Gold", 10, "Gold", "bread"),
+    ("Rations", 0.5, "Food", "bread", 10),
+    ("Waterskin", 0.2, "Food", "bread", 10),
+    ("Salt", 0.5, "Trade", "bread", 1),
+    ("Spice", 2, "Trade", "bread", 1),
+    ("Silverware", 5, "Trade", "bread", 1),
+    ("Silk Bundle", 10, "Trade", "bread", 1),
+    ("Gold Bar", 10, "Gold", "bread", 1),
 ]
+
 
 TABULATOR = '        '

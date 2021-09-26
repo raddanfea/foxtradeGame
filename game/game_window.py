@@ -1,15 +1,12 @@
 import json
-import math
 
-import pygame, sys, time, random
+import pygame, sys
 from pygame import K_w, K_s, K_a, K_d, QUIT, K_ESCAPE, KEYDOWN, K_t, USEREVENT, K_m, K_KP_PLUS, K_KP_MINUS
 from classes import KeyEventsObj
 from game.debug_gui import debug_gui
-from game.player_data import PlayerData
 from game.save_class import SaveClass
 from game.settings import prepStuff
 from game.small_functions import drawCursor, imgColorToType, point_intermediates, day_night_time_to_shader
-from game.trade_classes import shopData, AllShopData
 from game.trade_window import trade_window
 from container_classes import MapClass, MusicClass
 
@@ -20,8 +17,8 @@ def game_window():
     saveData = SaveClass()
     shops, playerData = saveData.load()
 
-    display = pygame.Surface(gameData.screen.get_size())
-    night = pygame.surface.Surface(display.get_size())
+    display = pygame.Surface(gameData.screen.get_size()).convert()
+    night = pygame.surface.Surface(display.get_size()).convert_alpha()
     font = gameData.default_font
 
     map_data = MapClass()
@@ -45,6 +42,8 @@ def game_window():
 
     day_night_time = 0
 
+    shops.tickModifiers()
+
     while True:
 
         mousepos_x, mousepos_y = mouse_pos = pygame.mouse.get_pos()
@@ -63,11 +62,10 @@ def game_window():
         display.blit(playerData.getBlit(intermediates, p_x),
                      (int(display.get_width() * 0.5) - 40, int(display.get_height() * 0.5) - 40))
 
-        # night effect
-        day_night_shader = day_night_time_to_shader(day_night_time)
-        night.fill((1.5*day_night_shader, 2*day_night_shader, 1.5*day_night_shader))
+        # night effect | blue tint + darkness
+        night.fill((0, 0, day_night_time_to_shader(day_night_time)*0.2, day_night_time_to_shader(day_night_time)))
 
-        display.blit(night, (0, 0), special_flags=pygame.BLEND_RGB_SUB)
+        display.blit(night, (0, 0))
 
         drawCursor(display, gameData, *mouse_pos)
 
@@ -102,7 +100,6 @@ def game_window():
                         json.dump(gameData.get_settings_data(), f)
 
                     playerData.player_pos = offset_real_x, offset_real_y
-                    print(playerData.player_pos[-2:])
                     saveData.save(shops, playerData)
                     pygame.quit()
                     sys.exit()

@@ -1,3 +1,5 @@
+import colorsys
+
 import pygame
 
 
@@ -45,10 +47,10 @@ def day_night_time_to_shader(time):
     if time < 25:
         return 0
     if time < 50:
-        return time - 25
+        return (time - 25) / 25 * 100
     if time < 60:
-        return 25
+        return 1 * 100
     if time < 85:
-        return 85 - time
+        return (85 - time) / 25 * 100
     else:
         return 0

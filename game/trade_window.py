@@ -29,6 +29,9 @@ def trade_window(screen, playerData, gameData, shopObject: shopData):
     key_events.add_user_event("text_speed", 30)
 
     while trade_w_run:
+
+        shopObject.calculateModifiers()
+
         mouse_pos = pygame.mouse.get_pos()
 
         screen.blit(trade_bg, (text_box.x, 0))
