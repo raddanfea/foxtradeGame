@@ -1,12 +1,12 @@
 import pygame
 from pygame import QUIT, KEYDOWN, K_ESCAPE, K_r, K_z, K_o, K_p, USEREVENT, K_m, K_l
 
-from game.VARS import TABULATOR
-from game.classes import KeyEventsObj
-from game.small_functions import drawCursor
-from game.string_gen import SpecialItem
-from game.text_box import textBox
-from game.trade_classes import inventoryBox, shopData
+from game_old.VARS import TABULATOR
+from game_old.classes import KeyEventsObj
+from game_old.small_functions import drawCursor
+from game_old.string_gen import SpecialItem
+from game_old.text_box import textBox
+from game_old.trade_classes import inventoryBox, shopData
 
 
 def trade_window(screen, playerData, gameData, shopObject: shopData):

@@ -1,7 +1,7 @@
 from pygame.transform import flip
 
-from game.small_functions import load_tileset
-from game.trade_classes import shopData
+from game_old.small_functions import load_tileset
+from game_old.trade_classes import shopData
 
 
 class PlayerData:

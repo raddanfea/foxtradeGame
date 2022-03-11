@@ -3,11 +3,11 @@ import json
 import pygame, sys
 from pygame import K_w, K_s, K_a, K_d, QUIT, K_ESCAPE, KEYDOWN, K_t, USEREVENT, K_m, K_KP_PLUS, K_KP_MINUS
 from classes import KeyEventsObj
-from game.debug_gui import debug_gui
-from game.save_class import SaveClass
-from game.settings import prepStuff
-from game.small_functions import drawCursor, imgColorToType, point_intermediates, day_night_time_to_shader
-from game.trade_window import trade_window
+from game_old.debug_gui import debug_gui
+from game_old.save_class import SaveClass
+from game_old.settings import prepStuff
+from game_old.small_functions import drawCursor, imgColorToType, point_intermediates, day_night_time_to_shader
+from game_old.trade_window import trade_window
 from container_classes import MapClass, MusicClass
 
 

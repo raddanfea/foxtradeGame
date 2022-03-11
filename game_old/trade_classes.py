@@ -2,8 +2,8 @@ import random
 
 import pygame
 
-from game.VARS import GENERIC_ITEMS
-from game.classes import draw_text
+from game_old.VARS import GENERIC_ITEMS
+from game_old.classes import draw_text
 
 
 class inventoryBox:

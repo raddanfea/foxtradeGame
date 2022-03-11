@@ -1,8 +1,8 @@
 import pickle
 import zlib
 
-from game.player_data import PlayerData
-from game.trade_classes import AllShopData
+from game_old.player_data import PlayerData
+from game_old.trade_classes import AllShopData
 
 
 # Bundle whole class for AllShops, saves data only for PlayerData, for pickling the class without pygame classes

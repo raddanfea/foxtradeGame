@@ -22,7 +22,7 @@ class GameSettings:
         self.width = 1920
         self.height = 1080
         self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
-        self.default_font = pygame.font.Font('../game/assets/font/silver.ttf', 25)
+        self.default_font = pygame.font.Font('../game_old/assets/font/silver.ttf', 25)
         self.click = False
         self.fps = 60
         self.scale = 100
