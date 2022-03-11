@@ -5,7 +5,7 @@ from game.player_data import PlayerData
 from game.trade_classes import AllShopData
 
 
-# Bundle whole class for AllShops, save data only for PlayerData, for pickling the class without pygame classes
+# Bundle whole class for AllShops, saves data only for PlayerData, for pickling the class without pygame classes
 # PLEASE WORK I DONT WANT TO TOUCH THIS AGAIN
 class SaveBundler:
     def __init__(self, a: AllShopData, b: PlayerData):

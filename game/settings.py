@@ -40,7 +40,7 @@ class GameSettings:
     def change_res(self, x: int, y: int):
         self.width = x
         self.height = y
-        self.screen = pygame.display.set_mode((self.width, self.height), pygame.FULLSCREEN)
+        self.screen = pygame.display.set_mode(pygame.FULLSCREEN)
 
     def get_settings_data(self):
         return {'fps': self.fps, 'width': self.width, 'height': self.height, 'vsync': self.vsync,

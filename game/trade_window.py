@@ -11,7 +11,7 @@ from game.trade_classes import inventoryBox, shopData
 
 def trade_window(screen, playerData, gameData, shopObject: shopData):
     trade_w_run = True
-    scale = 0.2
+    scale = 0.28
 
     trade_bg = pygame.image.load('assets/scenes/town.jpg')
     trade_bg = pygame.transform.scale(trade_bg,
