@@ -1,0 +1,30 @@
+| character show mage_neutral
+Hello there! I'm Shanti, your guardian.
+How are you doing?
+I think you are doing fine!
+The thing is, I have a job for you.
+Please go and collect 15 gold to prove that you are a good candidate. I'm sure this will not be a difficult task for you. Dont forget to back when you are done!
+| condition have_gold 15
+Great! Now, could you go to the temple?
+| condition be_at 1
+Amazing! You are doing so well! I'm so proud of you!
+| character show mage_smile
+Now, do you want to play hide and seek? Of course you do! Come find me!
+| character hide mage
+| condition be_at 3
+| character show mage_neutral
+Incredible! Aren't you just the most eager cutie pie!
+Now, let me tell you a story.
+Zorian is a teenage mage of humble birth and slightly above-average skill, attending his third year of education at Cyoria's magical academy.
+He is a driven and irritable young man, consumed by a desire to ensure his own future and free himself of the influence of his family, whom he resents for favoring his brothers over him.
+Consequently, he has no time for pointless distractions or paying attention to other people's problems. As it happens, time is something he is about to get plenty of.
+On the eve of the Cyoria's annual summer festival, he is killed and brought back to the beginning of the month, just before he was about to take a train to Cyoria.
+Now, what have you learned?
+Yes!
+Now go and collect 50 gold pieces! I'll wait for you at the temple.
+| condition have_gold 50
+| condition be_at 1
+| character show mage_neutral
+The hell? You are still here?
+Ahh, Fine. Good job. Now, go and have fun.
+END

@@ -1,0 +1,25 @@
+
+
+----- Thank you for downloading Alphonse sprite pack! -----
+
+A character sprite you can use in your visual novel and other game projects. 
+	
+	-- You can use the sprite for personal and non-commercial use. --
+
+-- The pack includes a total of 11 PNG files,  Image size: 557x1080
+	  - Pre-made exported png images 
+		- Happy		- Crying
+		- Smiling	- Blushing
+		- Neutral	- Surprised
+		- Sad		- Disgust
+		- Angry		- Evil
+		- Confused
+
+-- Conditions:
+	- Modifications are okay but modifying the sprite for the purpose of distribution and claiming ownership is not okay.
+	- You may not share or sell this asset either by itself or in a bundle with other materials in any way.
+	- Please do not use the sprite on offensive themes that may deem disrespectful or inappropriate (such as illegal themes or weird fetishes).
+	- (Optional) Sharing the link of your project where the sprite is used is greatly appreciated!
+	- If you have any questions drop them on the itchio page where you downloaded the sprite.
+
+-- Credit me as "Minttydrops" adding a link to my itchio is appreciated but it's not required --

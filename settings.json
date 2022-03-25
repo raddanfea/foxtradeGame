@@ -1,0 +1,12 @@
+{
+    "reset_screen": 0,
+    "width": 1920,
+    "height": 1080,
+    "fullscreen": true,
+    "volume": [
+        4,
+        5
+    ],
+    "lang": "EN",
+    "difficulty": "Normal"
+}
