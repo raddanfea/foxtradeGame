@@ -5,7 +5,7 @@ Written and developed by Rádi Dániel, as a Thesis project for the University o
 ### INSTALL
 
 1. Install Python 3.6 or newer
-	- Install from file, web or packet manager. Windows Store will NOT work.
+	- Install from file, web or packet manager. Windows Store may NOT work.
 2. Install pygame 2.0.0 or newer.
 	- Terminal: python -m pip install pygame
 
