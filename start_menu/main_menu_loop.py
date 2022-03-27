@@ -5,11 +5,12 @@ from pygame import QUIT
 
 from classes.common_functions import draw_cursor
 from classes.game_object import GameObject
+from classes.sound_class import MUSICENDEVENT
 from start_menu.start_menu_ui import draw_menu_ui
 
 
 def main_menu_loop(game: GameObject):
-    game.sounds.load_next()
+    game.sounds.load_next_song()
 
     main_loop = True
     while main_loop:
@@ -35,6 +36,9 @@ def main_menu_loop(game: GameObject):
                     game.clicked = pygame.mouse.get_pos()
                 if event.button == 2:
                     main_loop = False
+
+            if event.type == MUSICENDEVENT:
+                game.sounds.load_next_song()
 
         # pygame tick handling
         game.mainClock.tick(600)

@@ -5,6 +5,7 @@ from pygame import QUIT
 
 from classes.common_functions import draw_cursor
 from classes.game_object import GameObject
+from classes.sound_class import MUSICENDEVENT
 from screens.story_screen.story_draw_functions import draw_story_npc
 from screens.story_screen.story_screen_ui import draw_story_screen_ui
 
@@ -56,6 +57,9 @@ def story_loop(game: GameObject):
             if event.type == pygame.KEYUP:
                 if event.key == pygame.K_ESCAPE:
                     local_loop = False
+
+            if event.type == MUSICENDEVENT:
+                game.sounds.load_next_song()
 
         # pygame tick handling
         game.mainClock.tick(600)

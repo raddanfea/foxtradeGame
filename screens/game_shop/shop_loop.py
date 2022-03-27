@@ -4,6 +4,7 @@ import pygame
 from pygame import QUIT
 
 from classes.common_functions import draw_cursor
+from classes.sound_class import MUSICENDEVENT
 from screens.game_shop.draw_functions_shop import draw_inventory, draw_shop_bg, draw_shop_npc
 from screens.game_shop.shop_functions import determine_text
 from screens.game_shop.shop_loop_ui import draw_shop_screen_ui
@@ -49,6 +50,9 @@ def shop_loop(game):
                     local_loop = False
             if event.type == game.key_events.user_events['text_speed']:
                 game.textbox.text_step(game)
+
+            if event.type == MUSICENDEVENT:
+                game.sounds.load_next_song()
 
         # pygame tick handling
         game.mainClock.tick(600)

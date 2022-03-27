@@ -21,12 +21,9 @@ from screens.story_screen.story_class import StoryObject
 class GameObject:
     def __init__(self, path):
         pygame.init()
-        icon = pygame.image.load(os.path.join(path, 'assets', 'icon.png'))
-        icon.set_colorkey((0, 0, 0))
-        pygame.display.set_icon(icon)
-        pygame.display.set_caption('Tails')
 
         self.path = path
+        self.set_icon()
 
         self.save_settings = SaveSettingsObject(self)
         self.mainClock = pygame.time.Clock()
@@ -51,3 +48,9 @@ class GameObject:
         self.gui_images = ImageLoader(self, 'gui')
         self.item_images = ImageLoader(self, 'items')
         self.bg_images = ImageLoader(self, 'background_images')
+
+    def set_icon(self):
+        icon = pygame.image.load(os.path.join(self.path, 'assets', 'icon.png'))
+        icon.set_colorkey((0, 0, 0))
+        pygame.display.set_icon(icon)
+        pygame.display.set_caption('Tails')

@@ -3,6 +3,8 @@ import random
 import pygame
 from pygame.constants import USEREVENT
 
+MUSICENDEVENT = USEREVENT + 99
+
 
 class SoundClass:
     def __init__(self, game):
@@ -40,7 +42,7 @@ class SoundClass:
         if not self.playing_sound:
             self.sounds[name].play()
 
-    def load_next(self):
+    def load_next_song(self):
         try:
             if self.current < len(self.bg_music) - 1:
                 self.current += 1
@@ -54,7 +56,7 @@ class SoundClass:
         dummy, self.current_name = os.path.split(
             self.bg_music[self.current][self.bg_music[self.current].rfind('/') + 1:-4].replace('_', ' '))
         pygame.mixer.music.play()
-        pygame.mixer.music.set_endevent(USEREVENT + 99)
+        pygame.mixer.music.set_endevent(MUSICENDEVENT)
 
     def get_vol(self, type):
         return self.volumes[self.sound_type[type]]
@@ -94,5 +96,5 @@ class SoundClass:
 
     def load_save_data(self, game):
         self.volumes = game.player.settings.settings['volume']
-        self.set_vol(round(self.volumes[0] * 0.01, 2), game, 0)     # music
-        self.set_vol(round(self.volumes[1] * 0.01, 2), game, 1)     # sound
+        self.set_vol(round(self.volumes[0] * 0.01, 2), game, 0)  # music
+        self.set_vol(round(self.volumes[1] * 0.01, 2), game, 1)  # sound

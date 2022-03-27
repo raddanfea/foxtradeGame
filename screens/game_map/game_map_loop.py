@@ -5,6 +5,7 @@ from pygame import QUIT, USEREVENT
 
 from classes.common_functions import draw_cursor
 from classes.game_object import GameObject
+from classes.sound_class import MUSICENDEVENT
 from screens.game_map.draw_functions_map import \
     draw_game_map, draw_player, draw_game_map_overhead, is_in_village
 from screens.game_map.game_map_functions import tick_day_night_time
@@ -64,13 +65,16 @@ def game_map_loop(game: GameObject):
                 game.player.move(game)
 
             if event.type == USEREVENT + 99:
-                game.sounds.load_next()
+                game.sounds.load_next_song()
 
             if event.type == game.key_events.user_events['player_anim_speed']:
                 game.player.next_state()
 
             if event.type == game.key_events.user_events['day_night_clock'] and game.player.intermediates:
                 tick_day_night_time(game)
+
+            if event.type == MUSICENDEVENT:
+                game.sounds.load_next_song()
 
         draw_cursor(game, ingame=True)
         pygame.display.flip()

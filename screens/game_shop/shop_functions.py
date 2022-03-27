@@ -25,8 +25,9 @@ def calculate_prices(game):
 
 def handle_silver(game, gold, no_and=False):
     gold_piece = floor(gold)
-    gold = float(gold)
+    gold = "{:.2f}".format(gold)
     silver_piece = int(str(gold)[str(gold).find(".") + 1:])
+
     text = ''
     if gold_piece:
         text = f'{gold_piece} {get_language_string(game, "gold")}'
@@ -46,7 +47,7 @@ def determine_text(game):
     location, item_name, default_price, stock, max_stock, price, sell, buy = calculate_prices(game)
 
     exclaim = "."
-    if default_price > buy:
+    if default_price > buy and game.save_settings.settings['difficulty'] == next(iter(DIFFICULTY)):
         exclaim = "!"
 
     text = [f'Ah, {get_language_string(game, item_name)}{exclaim}']

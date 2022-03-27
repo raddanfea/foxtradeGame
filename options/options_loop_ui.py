@@ -54,7 +54,7 @@ def draw_options_ui(game: GameObject):
 
     music_next.highlight_check(game)
     if music_next.collides(game.clicked):
-        game.sounds.load_next()
+        game.sounds.load_next_song()
         game.sounds.play_sound('click')
 
     # SOUND
