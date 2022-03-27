@@ -12,10 +12,10 @@ DIFFICULTY = {
 def calculate_prices(game):
     location = game.player.location
     item_name = game.player.selected_item
-    default_price = game.inventories.inventory[location].inventory[item_name][0][0]
-    price_mod = game.inventories.inventory[location].inventory_price_mod[item_name]
-    stock = game.inventories.inventory[location].inventory[item_name][-1]
-    max_stock = game.inventories.inventory[location].inventory[item_name][0][-1][-1]
+    default_price = game.inventories.loc_inventory[location].inventory[item_name][0][0]
+    stock = game.inventories.loc_inventory[location].inventory[item_name][-1]
+    max_stock = game.inventories.loc_inventory[location].inventory[item_name][0][-1][-1]
+    price_mod = game.inventories.loc_inventory[location].inventory_price_mod[item_name]
     price = round(default_price * price_mod, 2)
     sell = round(price, 2)
     buy = round(price * 1.10 * DIFFICULTY[game.save_settings.settings["difficulty"]], 2)
@@ -42,7 +42,6 @@ def handle_silver(game, gold, no_and=False):
 
 
 def determine_text(game):
-
     game.sounds.play_sound('click')
     location, item_name, default_price, stock, max_stock, price, sell, buy = calculate_prices(game)
 
@@ -53,11 +52,13 @@ def determine_text(game):
     text = [f'Ah, {get_language_string(game, item_name)}{exclaim}']
 
     if stock != 0:
-        text.append(f'{get_language_string(game, "offer_sale")} {handle_silver(game, buy)} {get_language_string(game, "pieces")}.')
+        text.append(
+            f'{get_language_string(game, "offer_sale")} {handle_silver(game, buy)} {get_language_string(game, "pieces")}.')
     else:
         text.append(f'{get_language_string(game, "none_to_sell")}')
     if stock != max_stock:
-        text.append(f'{get_language_string(game, "offer_purchase")} {handle_silver(game, sell)} {get_language_string(game, "pieces")}.')
+        text.append(
+            f'{get_language_string(game, "offer_purchase")} {handle_silver(game, sell)} {get_language_string(game, "pieces")}.')
     else:
         text.append(f'{get_language_string(game, "too_much_stock")}')
     return ' '.join(text)
@@ -75,8 +76,8 @@ def try_to_buy(game):
         return get_language_string(game, 'too_poor')
 
     game.player.gold_coin = round(game.player.gold_coin - buy, 2)
-    game.inventories.inventory[location].inventory[item_name][-1] -= 1
-    game.inventories.inventory[0].inventory[item_name][-1] += 1
+    game.inventories.loc_inventory[location].inventory[item_name][-1] -= 1
+    game.inventories.loc_inventory[0].inventory[item_name][-1] += 1
     game.sounds.play_sound('money')
     return False
 
@@ -89,10 +90,10 @@ def try_to_sell(game):
 
     if stock >= max_stock + 1:
         return get_language_string(game, 'sell_no_more')
-    if game.inventories.inventory[0].inventory[item_name][-1] < 1:
+    if game.inventories.loc_inventory[0].inventory[item_name][-1] < 1:
         return get_language_string(game, 'you_have_none')
 
     game.player.gold_coin = round(game.player.gold_coin + sell, 2)
-    game.inventories.inventory[location].inventory[item_name][-1] += 1
-    game.inventories.inventory[0].inventory[item_name][-1] -= 1
+    game.inventories.loc_inventory[location].inventory[item_name][-1] += 1
+    game.inventories.loc_inventory[0].inventory[item_name][-1] -= 1
     return False

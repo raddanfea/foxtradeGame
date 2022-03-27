@@ -13,9 +13,9 @@ default = {
 
 
 class SaveSettingsObject:
-    def __init__(self, game):
+    def __init__(self, path):
         self.settings = default
-        self.path = game.path
+        self.path = path
 
     def change_settings(self, new_d: dict):
         for each in new_d:
@@ -37,18 +37,20 @@ class SaveSettingsObject:
 
 
 def test():
-    save = SaveSettingsObject()
+    save = SaveSettingsObject(os.path.abspath("."))
     a = save.settings
 
     save.load_settings()
     save.save_settings()
     save.load_settings()
-    # print(a == save.settings)
+    print(a == save.settings, " | expected: True")
 
     save.change_settings({'width': 99, 'fullscreen': 1})
     save.save_settings()
     save.load_settings()
-    # print(save.settings)
+    print(save.settings, " | expected: detailed settings")
+    print(default == save.settings, " | expected: false")
+    os.remove(os.path.join(os.path.abspath("."), 'settings.json'))
 
 
 if __name__ == '__main__':

@@ -31,7 +31,7 @@ def game_map_ui(game: GameObject):
                              ))
 
     draw_text(
-        text=f'{game.inventories.inventory[0].inventory["Rations"][1]} ',
+        text=f'{game.inventories.loc_inventory[0].inventory["Rations"][1]} ',
         color=(0, 0, 0), surface=game.screen.screen,
         x=int(game.screen.screen.get_width() * 0.01 + game.item_images.images['bread'].get_width() * 1.5),
         y=int(game.screen.screen.get_height() -

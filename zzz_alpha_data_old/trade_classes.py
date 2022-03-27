@@ -102,7 +102,7 @@ class InventoryHandler:
         self.owner_id = owner_class.shop_id
         self.owner_class = owner_class
         self.all_items = [GenericTradeItem(*each, item_id=x) for x, each in enumerate(GENERIC_ITEMS)]
-        self.counts = owner_class.inventory
+        self.counts = owner_class.loc_inventory
 
     def getInventory(self):
         return [(self.counts[x], each) for x, each in enumerate(self.all_items)]

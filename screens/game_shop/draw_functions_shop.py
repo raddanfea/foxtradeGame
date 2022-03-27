@@ -2,10 +2,10 @@ from screens.game_shop.item_button_class import ItemObject
 
 
 def draw_inventory(game):
-    for i, each in enumerate(game.inventories.inventory[0].inventory.keys()):
+    for i, each in enumerate(game.inventories.loc_inventory[0].inventory.keys()):
         item = ItemObject(game, 'trade_item_btn', 0.15, i * 0.11)
         item.draw(game)
-        item.draw_item_data(game, each, game.inventories.inventory[0].inventory[each])
+        item.draw_item_data(game, each, game.inventories.loc_inventory[0].inventory[each])
         if item.check_mouse(game.clicked):
             game.player.selected_item = each
             game.player.selected = False

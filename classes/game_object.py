@@ -25,7 +25,7 @@ class GameObject:
         self.path = path
         self.set_icon()
 
-        self.save_settings = SaveSettingsObject(self)
+        self.save_settings = SaveSettingsObject(self.path)
         self.mainClock = pygame.time.Clock()
 
         self.screen = ScreenObject(self)

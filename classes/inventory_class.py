@@ -3,20 +3,20 @@ import random
 
 class AllInventoryObject:
     def __init__(self):
-        self.inventory = [InventoryObject(i) for i in range(10)]
+        self.loc_inventory = [InventoryObject(i) for i in range(10)]
 
         self.add_item_to_player('Rations', 3)
 
     def tick_time(self, game):
-        for i, each in enumerate(self.inventory):
+        for i, each in enumerate(self.loc_inventory):
             if i != 0:
                 each.generate_items(i, game.player.last_location)
 
     def add_item_to_player(self, name, amount):
-        self.inventory[0].inventory[name][1] += amount
+        self.loc_inventory[0].inventory[name][1] += amount
 
     def check_item_count_for_player(self, name):
-        return self.inventory[0].inventory[name][1]
+        return self.loc_inventory[0].inventory[name][1]
 
     def daily_eat(self, game):
         if self.check_item_count_for_player("Rations"):
