@@ -19,7 +19,7 @@ class PlayerObject:
         self.selected_item = 0
         self.selected = False
         self.gold_coin = 10
-        self.tails_coin = 0
+        self.tails_coin = 5
         self.tails = 0
         self.movement_speed = 30
         self.player_anim_speed = 150

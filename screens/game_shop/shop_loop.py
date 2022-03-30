@@ -56,3 +56,5 @@ def shop_loop(game):
 
         # pygame tick handling
         game.mainClock.tick(600)
+
+    game.save.save(game)

@@ -15,6 +15,9 @@ class AllInventoryObject:
     def add_item_to_player(self, name, amount):
         self.loc_inventory[0].inventory[name][1] += amount
 
+    def set_item_to_player(self, name, amount):
+        self.loc_inventory[0].inventory[name][1] = amount
+
     def check_item_count_for_player(self, name):
         return self.loc_inventory[0].inventory[name][1]
 

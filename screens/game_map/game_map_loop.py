@@ -81,3 +81,5 @@ def game_map_loop(game: GameObject):
 
         # pygame tick handling
         game.mainClock.tick(600)
+
+    game.save.save(game)

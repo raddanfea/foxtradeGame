@@ -7,8 +7,8 @@ Please go and collect 15 gold to prove that you are a good candidate. I'm sure t
 | condition have_gold 15
 Great! Now, could you go to the temple?
 | condition be_at 1
-Amazing! You are doing so well! I'm so proud of you!
 | character show mage_smile
+Amazing! You are doing so well! I'm so proud of you!
 Now, do you want to play hide and seek? Of course you do! Come find me!
 | character hide mage
 | condition be_at 3

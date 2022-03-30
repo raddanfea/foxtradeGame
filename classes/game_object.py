@@ -8,6 +8,7 @@ from classes.common_functions import load_cursor
 from classes.key_events_object import KeyEventsObject
 from classes.language_class import LangObject
 from classes.map_class import MapClass
+from classes.save_class import SaveObject
 from classes.sound_class import SoundClass
 from classes.npc_class import NpcObject
 from classes.player_class import PlayerObject
@@ -48,6 +49,8 @@ class GameObject:
         self.gui_images = ImageLoader(self, 'gui')
         self.item_images = ImageLoader(self, 'items')
         self.bg_images = ImageLoader(self, 'background_images')
+
+        self.save = SaveObject(self)
 
     def set_icon(self):
         icon = pygame.image.load(os.path.join(self.path, 'assets', 'icon.png'))
