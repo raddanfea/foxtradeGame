@@ -3,6 +3,8 @@
     "start": "Start",
     "options": "Options",
     "exit": "Exit",
+    "delete": "Delete",
+    "save": "Save",
     "sound": "Sound",
     "music": "Music",
     "sfx": "SFX",

@@ -28,6 +28,7 @@ class PlayerObject:
         self.animstate = 0
         self.last_dir = 0
         self.player_offset = convert_coordinates(game)
+        self.default_offset = self.player_offset
         self.intermediates = []
         self.settings = game.save_settings
 

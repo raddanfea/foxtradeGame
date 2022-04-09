@@ -7,6 +7,7 @@ from classes.common_functions import draw_text, get_language_string
 from classes.game_object import GameObject
 from screens.game_map.game_map_loop import game_map_loop
 from options.options_loop import options_loop
+from screens.save_screen.save_screen_loop import save_screen_loop
 
 
 def draw_menu_ui(game: GameObject):
@@ -28,7 +29,7 @@ def draw_menu_buttons(game: GameObject):
     button1.highlight_check(game)
     if button1.collides(game.clicked):
         game.sounds.play_sound('click')
-        game_map_loop(game)
+        save_screen_loop(game)
 
     button2 = TextButton(
         text=f'{get_language_string(game, "options")}',
