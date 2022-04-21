@@ -15,12 +15,12 @@ def story_loop(game: GameObject):
 
     game.textbox.change_size(game, 0, "chat_window")
 
-    frozen_frame = game.screen.screen.copy()  # make a copy of previous frame
+    frozen_frame = game.window.screen.copy()  # make a copy of previous frame
     game.textbox.setText(game, '')
     while local_loop:
         game.mouse_pos = pygame.mouse.get_pos()
 
-        game.screen.draw_bg(frozen_frame)
+        game.window.draw_bg(frozen_frame)
 
         # if we are doing commands, skip rest
         if game.story.do_line(game):

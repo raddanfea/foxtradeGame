@@ -15,7 +15,7 @@ def save_screen_loop(game):
 
         game.mouse_pos = pygame.mouse.get_pos()
 
-        game.screen.draw_bg(game.bg_images.images['mountain'])
+        game.window.draw_bg(game.bg_images.images['mountain'])
 
         slot = draw_save_screen_ui(game)
         if slot:

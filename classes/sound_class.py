@@ -46,10 +46,9 @@ class SoundClass:
         try:
             if self.current < len(self.bg_music) - 1:
                 self.current += 1
-                pygame.mixer.music.load(self.bg_music[self.current])
             else:
                 self.current = 0
-                pygame.mixer.music.load(self.bg_music[self.current])
+            pygame.mixer.music.load(self.bg_music[self.current])
         except pygame.error:
             print("You are probably using Windows Store Python. It will NOT work, please use a proper install.")
 

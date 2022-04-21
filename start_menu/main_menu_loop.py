@@ -17,7 +17,7 @@ def main_menu_loop(game: GameObject):
 
         game.mouse_pos = pygame.mouse.get_pos()
 
-        game.screen.draw_bg(game.bg_images.images['mountain'])
+        game.window.draw_bg(game.bg_images.images['mountain'])
 
         draw_menu_ui(game)
 

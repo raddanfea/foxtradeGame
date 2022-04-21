@@ -32,7 +32,7 @@ class NpcObject:
                 self.all_npc[f'{each}_{type}'] = pygame.image.load(os.path.join(path, each, f'{type}.png')).convert_alpha()
 
         for each in self.all_npc:
-            scaling = (game.screen.screen.get_height() * 0.6) / self.all_npc[each].get_height()
+            scaling = (game.window.screen.get_height() * 0.6) / self.all_npc[each].get_height()
             self.all_npc[each] = pygame.transform.scale(self.all_npc[each],
                                                         (int(self.all_npc[each].get_width() * scaling),
                                                          int(self.all_npc[each].get_height() * scaling)))

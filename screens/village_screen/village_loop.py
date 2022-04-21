@@ -10,13 +10,13 @@ from screens.village_screen.village_loop_ui import draw_village_screen_ui
 
 def village_loop(game: GameObject):
     local_loop = True
-    frozen_frame = game.screen.screen.copy()  # make a copy of previous frame
+    frozen_frame = game.window.screen.copy()  # make a copy of previous frame
     game.sounds.play_sound('enter')
 
     while local_loop:
         game.mouse_pos = pygame.mouse.get_pos()
 
-        game.screen.draw_bg(frozen_frame)
+        game.window.draw_bg(frozen_frame)
 
         local_loop = draw_village_screen_ui(game)
 

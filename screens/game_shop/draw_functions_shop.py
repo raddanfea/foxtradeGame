@@ -13,12 +13,12 @@ def draw_inventory(game):
 
 
 def draw_shop_bg(game):
-    game.screen.screen.blit(game.gui_images.images['trade_frame'], (0, 0))
-    game.screen.screen.blit(game.bg_images.images['riverside_trade'], (game.screen.screen.get_width() * 0.3, 0))
+    game.window.screen.blit(game.gui_images.images['trade_frame'], (0, 0))
+    game.window.screen.blit(game.bg_images.images['riverside_trade'], (game.window.screen.get_width() * 0.3, 0))
 
 
 def draw_shop_npc(game):
-    game.screen.screen.blit(game.npc.get_npc(game),
-                            (game.screen.screen.get_width() * 0.6 - game.npc.get_npc(game).get_width() * 0.5,
-                             game.screen.screen.get_height() * 0.1))
+    game.window.screen.blit(game.npc.get_npc(game),
+                            (game.window.screen.get_width() * 0.6 - game.npc.get_npc(game).get_width() * 0.5,
+                             game.window.screen.get_height() * 0.1))
 

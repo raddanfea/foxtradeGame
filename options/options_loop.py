@@ -13,7 +13,7 @@ def options_loop(game: GameObject):
     while local_loop:
         game.mouse_pos = pygame.mouse.get_pos()
 
-        game.screen.draw_bg(game.gui_images.images['generic_frame'])
+        game.window.draw_bg(game.gui_images.images['generic_frame'])
 
         local_loop = draw_options_ui(game)
 

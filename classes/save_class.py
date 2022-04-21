@@ -33,7 +33,7 @@ class SaveObject:
         gold = game.player.gold_coin if not new_slot else 10
         pos = game.player.player_offset
         last_loc = game.player.last_location if not new_slot else 0
-        story_state = game.story.story_states if not new_slot else {}
+        story_state = game.story.story_states if not new_slot else {"story": 0}
         save_slot = self.current if not new_slot else new_slot
 
         items = []

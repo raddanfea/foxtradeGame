@@ -6,8 +6,8 @@ from screens.game_map.game_map_loop import game_map_loop
 def draw_save_screen_ui(game):
     button1 = TextButton(
         text=f'{get_language_string(game, "save")} 1',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.5,
-        y=game.screen.screen.get_height() * 0.4,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.5,
+        y=game.window.screen.get_height() * 0.4,
         w=0, h=0, center=True, font=game.fonts.button)
 
     button1.highlight_check(game)
@@ -17,8 +17,8 @@ def draw_save_screen_ui(game):
 
     button1_del = TextButton(
         text=f'{get_language_string(game, "delete")}',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.7,
-        y=game.screen.screen.get_height() * 0.4,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.7,
+        y=game.window.screen.get_height() * 0.4,
         w=0, h=0, center=True, font=game.fonts.button)
 
     button1_del.highlight_check(game)
@@ -28,8 +28,8 @@ def draw_save_screen_ui(game):
 
     button2 = TextButton(
         text=f'{get_language_string(game, "save")} 2',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.5,
-        y=game.screen.screen.get_height() * 0.5,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.5,
+        y=game.window.screen.get_height() * 0.5,
         w=0, h=0, center=True, font=game.fonts.button)
 
     button2.highlight_check(game)
@@ -37,13 +37,35 @@ def draw_save_screen_ui(game):
         game.sounds.play_sound('click')
         return 2
 
+    button2_del = TextButton(
+        text=f'{get_language_string(game, "delete")}',
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.7,
+        y=game.window.screen.get_height() * 0.5,
+        w=0, h=0, center=True, font=game.fonts.button)
+
+    button2_del.highlight_check(game)
+    if button2_del.collides(game.clicked):
+        game.sounds.play_sound('click')
+        game.save.delete_save_slot(2)
+
     button3 = TextButton(
         text=f'{get_language_string(game, "save")} 3',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.5,
-        y=game.screen.screen.get_height() * 0.6,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.5,
+        y=game.window.screen.get_height() * 0.6,
         w=0, h=0, center=True, font=game.fonts.button)
 
     button3.highlight_check(game)
     if button3.collides(game.clicked):
         game.sounds.play_sound('click')
         return 3
+
+    button3_del = TextButton(
+        text=f'{get_language_string(game, "delete")}',
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.7,
+        y=game.window.screen.get_height() * 0.6,
+        w=0, h=0, center=True, font=game.fonts.button)
+
+    button3_del.highlight_check(game)
+    if button3_del.collides(game.clicked):
+        game.sounds.play_sound('click')
+        game.save.delete_save_slot(3)

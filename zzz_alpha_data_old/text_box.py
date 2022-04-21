@@ -20,7 +20,7 @@ class textBox:
 
     def drawBox(self, game):
         bg_pos = (self.x, self.y)
-        game.screen.screen.braw_bg(self.bg, bg_pos)
+        game.window.screen.braw_bg(self.bg, bg_pos)
 
     def text_step(self):
         if self.text_state != -1:

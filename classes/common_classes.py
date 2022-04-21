@@ -9,12 +9,12 @@ class Fonts:
     def __init__(self, game):
         self.font_path = os.path.join(game.path, *'assets/font/silver.ttf'.split('/'))
 
-        self.default = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 43*0.5))
-        self.title = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 3.6*0.5))
-        self.big_button = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 7.5*0.5))
-        self.button = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 10.8*0.45))
-        self.medium = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 24*0.5))
-        self.large = pygame.font.Font(self.font_path, int(game.screen.screen.get_width() // 13.5*0.5))
+        self.default = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 43*0.5))
+        self.title = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 3.6*0.5))
+        self.big_button = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 7.5*0.5))
+        self.button = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 10.8*0.45))
+        self.medium = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 24*0.5))
+        self.large = pygame.font.Font(self.font_path, int(game.window.screen.get_width() // 13.5*0.5))
 
 
 class TextButton:
@@ -43,13 +43,13 @@ class ChoiceButton:
     def __init__(self, game, image_name, x, y):
         self.surface = game.gui_images.images[image_name]
         self.rect = self.surface.get_rect()
-        self.rect.center = (x * game.screen.screen.get_width(), y * game.screen.screen.get_height())
+        self.rect.center = (x * game.window.screen.get_width(), y * game.window.screen.get_height())
         self.focused = 'generic_btn_focused'
 
     def draw(self, game):
-        game.screen.screen.blit(self.surface, self.rect)
+        game.window.screen.blit(self.surface, self.rect)
         if self.check_mouse(game.mouse_pos):
-            game.screen.screen.blit(game.gui_images.images[self.focused], self.rect)
+            game.window.screen.blit(game.gui_images.images[self.focused], self.rect)
 
     def check_mouse(self, point):
         return self.rect.collidepoint(point)

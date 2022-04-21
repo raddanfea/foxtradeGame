@@ -29,7 +29,7 @@ class GameObject:
         self.save_settings = SaveSettingsObject(self.path)
         self.mainClock = pygame.time.Clock()
 
-        self.screen = ScreenObject(self)
+        self.window = ScreenObject(self)
 
         self.player = PlayerObject(self)
         self.game_map = MapClass(self)

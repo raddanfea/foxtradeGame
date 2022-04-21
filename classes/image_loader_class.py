@@ -18,13 +18,12 @@ class ImageLoader:
         self.scale(game, load_what)
 
     def scale(self, game, load_what):
-        w, h = game.screen.screen.get_size()
-        to_half = ['leave_btn', 'talk_btn', 'trade_btn', 'generic_btn_focused']
+        w, h = game.window.screen.get_size()
+        to_smol = ['leave_btn', 'talk_btn', 'trade_btn', 'generic_btn_focused']
         if load_what == 'gui':
-            for each in to_half:
-                self.images[each] = pygame.transform.scale(self.images[each],
-                                                           (int(self.images[each].get_width() * 0.5),
-                                                            int(self.images[each].get_height() * 0.5)))
+            for each in to_smol:
+                self.images[each] = pygame.transform.scale(self.images[each], (w * 0.14, h * 0.1))
+
             self.images['trade_frame'] = pygame.transform.scale(self.images['trade_frame'], (w * 0.3, h))
             self.images['chat_window'] = pygame.transform.scale(self.images['chat_window'], (w, h * 0.4))
             self.images['trade_chat'] = pygame.transform.scale(self.images['chat_window'], (w * 0.7, h * 0.4))

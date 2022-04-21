@@ -18,7 +18,7 @@ class MapClass:
 
     # reduce ram usage when using FullHD or smaller screens
     def optimise_maps(self, game):
-        w, h = game.screen.screen.get_size()
+        w, h = game.window.screen.get_size()
         crop_x, crop_y = 1150, 1000
         if w <= 1920 and h <= 1080:
             self.map_img = pygame.Surface.subsurface(self.map_img, crop_x, crop_y, 3750, 2100)

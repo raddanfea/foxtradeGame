@@ -24,11 +24,15 @@ class AllInventoryObject:
     def daily_eat(self, game):
         if self.check_item_count_for_player("Rations"):
             self.add_item_to_player("Rations", -1)
-            game.key_events.add_user_event("movement_speed", game.player.movement_speed)
-            game.key_events.add_user_event("player_anim_speed", game.player.player_anim_speed)
+            game.key_events.add_user_event("movement_speed",
+                                           game.player.movement_speed)
+            game.key_events.add_user_event("player_anim_speed",
+                                           game.player.player_anim_speed)
         else:
-            game.key_events.add_user_event("movement_speed", game.player.movement_speed * 3)
-            game.key_events.add_user_event("player_anim_speed", game.player.player_anim_speed * 3)
+            game.key_events.add_user_event("movement_speed",
+                                           game.player.movement_speed * 3)
+            game.key_events.add_user_event("player_anim_speed",
+                                           game.player.player_anim_speed * 3)
 
 
 class InventoryObject:
@@ -47,8 +51,10 @@ class InventoryObject:
         else:
             if i != last:
                 for each in GENERIC_ITEMS:
-                    self.inventory[each[0]] = [each[1:], random.randint(*each[-1])]
-                    self.inventory_price_mod[each[0]] = 1 + (random.randint(-4, 4) * 0.05)
+                    self.inventory[each[0]] = [each[1:],
+                                                random.randint(*each[-1])]
+                    self.inventory_price_mod[each[0]] = 1 + \
+                                                (random.randint(-4, 4) * 0.05)
 
         # print("---------------------\n", self.shop_id, "\n", self.inventory, "\n", self.inventory_price_mod)
         # prints all shop data for testing

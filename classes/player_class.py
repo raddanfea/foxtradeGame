@@ -8,7 +8,7 @@ from screens.game_map.game_map_functions import point_intermediates
 
 def convert_coordinates(game):
     start_x, start_y = 2303, 2119-500
-    map_w, map_h = game.screen.screen.get_size()
+    map_w, map_h = game.window.screen.get_size()
     return start_x - map_w * 0.5, start_y - map_h * 0.5
 
 
@@ -35,8 +35,8 @@ class PlayerObject:
     def get_intermediates(self, game):
 
         start = self.player_offset[0], self.player_offset[1]
-        finish = game.clicked[0] + self.player_offset[0] - game.screen.screen.get_width() * 0.5, \
-                 game.clicked[1] + self.player_offset[1] - game.screen.screen.get_height() * 0.5
+        finish = game.clicked[0] + self.player_offset[0] - game.window.screen.get_width() * 0.5, \
+                 game.clicked[1] + self.player_offset[1] - game.window.screen.get_height() * 0.5
         distance = int(math.hypot(start[1] - finish[1], start[0] - finish[0]))
         if start[0] >= finish[0]:
             self.last_dir = 1
@@ -47,8 +47,8 @@ class PlayerObject:
     def move(self, game):
         if self.intermediates:
             x, y = self.intermediates.pop(0)
-            if imgColorToType(game.game_map.map_walls.get_at((int(x + game.screen.screen.get_width() * 0.5),
-                                                              int(y + game.screen.screen.get_height() * 0.5)))):
+            if imgColorToType(game.game_map.map_walls.get_at((int(x + game.window.screen.get_width() * 0.5),
+                                                              int(y + game.window.screen.get_height() * 0.5)))):
                 self.player_offset = x, y
             else:
                 self.intermediates = []

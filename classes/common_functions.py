@@ -45,7 +45,8 @@ def load_tileset(filename, width, height):
 def load_cursor(game):
     cursor0 = pygame.image.load(os.path.join(game.path, *'assets/gui/mouse1.bmp'.split('/'))).convert_alpha()
     cursor0 = pygame.transform.scale(cursor0, (64, 64))
-    cursor1 = pygame.image.load(os.path.join(game.path, *'assets/gui/mouse2.bmp'.split('/'))).convert_alpha()
+    cursor1 = pygame.image.load(os.path.join(game.path,
+*'assets/gui/mouse2.bmp'.split('/'))).convert_alpha()
     cursor1 = pygame.transform.scale(cursor1, (64, 64))
     pygame.mouse.set_visible(False)
     return cursor0, cursor1
@@ -59,7 +60,7 @@ def draw_cursor(game, ingame=False):
                 (int(w + game.player.player_offset[0]),
                  int(h + game.player.player_offset[1])))) > 0:
         cursor = game.cursor[1]
-    game.screen.screen.blit(cursor, (w - cursor.get_width() * 0.5, h - cursor.get_height() * 0.5))
+    game.window.screen.blit(cursor, (w - cursor.get_width() * 0.5, h - cursor.get_height() * 0.5))
 
 
 # night effect | blue tint + darkness

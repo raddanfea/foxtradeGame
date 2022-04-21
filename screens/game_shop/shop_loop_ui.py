@@ -7,7 +7,7 @@ def draw_shop_screen_ui(game):
 
     buy_button = TextButton(
         text=f'Buy',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.9, y=game.screen.screen.get_height() * 0.7,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.9, y=game.window.screen.get_height() * 0.7,
         w=0, h=0, center=True, font=game.fonts.button)
 
     buy_button.highlight_check(game)
@@ -22,7 +22,7 @@ def draw_shop_screen_ui(game):
 
     sell_button = TextButton(
         text=f'Sell',
-        color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.9, y=game.screen.screen.get_height() * 0.8,
+        color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.9, y=game.window.screen.get_height() * 0.8,
         w=0, h=0, center=True, font=game.fonts.button)
 
     sell_button.highlight_check(game)
@@ -36,7 +36,7 @@ def draw_shop_screen_ui(game):
             game.sounds.play_sound('money')
 
     draw_text(text=f'{handle_silver(game, game.player.gold_coin, no_and=True)}',
-              color=(0, 0, 0), surface=game.screen.screen, x=game.screen.screen.get_width() * 0.02, y=game.screen.screen.get_height() * 0.90,
+              color=(0, 0, 0), surface=game.window.screen, x=game.window.screen.get_width() * 0.02, y=game.window.screen.get_height() * 0.90,
               w=0, h=0, center=False, font=game.fonts.large)
 
     b3 = ChoiceButton(game, 'leave_btn', 0.9, 0.9)
