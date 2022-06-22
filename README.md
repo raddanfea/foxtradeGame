@@ -38,4 +38,4 @@ Thanks to Artbreeder for providing Public Domain (CC0) art for the project.
 
 ### Minimum requirements
 
-- Should run on basically anything, as long as it has 2GB of system memory for the shaders.
+- Should run on basically anything, as long as it has 900MB of system memory for the shaders.
